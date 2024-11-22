@@ -1,0 +1,35 @@
+<form action="POST" class="form-profile">
+
+    <div class="form-item">
+        <label for="email" class="label-text">Email</label>
+    <input class="form-input" type="email" name="email" id="email" placeholder="name@example.com" required>
+    </div>
+
+    <div class="form-item">
+        <label for="fullName" class="label-text">ФИО</label>
+        <input class="form-input" type="text" name="fullName" id="fullName" placeholder="Иванов Иван Иванович" required>
+    </div>
+
+    <div class="form-item">
+        <label for="phoneNumber" class="label-text">Телефон</label>
+        <input class="form-input" type="tel" name="phoneNumber" id="phoneNumber" placeholder="+7 (xxx) xxx-xx-xx" pattern="\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}" required>
+    </div>
+
+    <div class="form-item">
+        <label for="gender" class="label-text">Пол</label>
+        <select class="form-input" name="gender" id="gender" required>
+            <option value="Male">Мужчина</option>
+            <option value="Female">Женщина</option>
+        </select>
+    </div>
+
+    <div class="form-item">
+        <label for="birthDate" class="label-text">Дата рождения</label>
+        <input class="form-input" type="date" name="birthDate" id="birthDate" min="1900-01-01" max="2024-01-01" required>
+    </div>
+    <p class="error"></p>
+    <button class="button" id="button-save-edit">Сохранить</button>
+</form>
+
+<link rel="stylesheet" href="/src/pages/profile/profile.css">
+<script type="module" src="profile.js" defer></script>

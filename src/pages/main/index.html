@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <p class="header-text">Блог №415</p>
+        <ul class="nav-bar">
+            <li>
+                <div class="left-menu">
+                    <a href="#" class="nav-text" id="button-main">Главная</a>
+                    <a href="#" class="nav-text" id="button-write-post">Написать пост</a>
+                </div>
+            </li>
+            <li>
+                <div id="dropdown-menu">
+                    <span class="user-menu-text" id="nav-mail">name@example.com ▼</span>
+                    <div id="dropdown-content">
+                        <a href="#" class="dropdown-item user-menu-text" id="button-profile">Профиль</a>
+                        <a href="#" class="dropdown-item user-menu-text" id="button-logout">Выйти</a>
+                    </div>
+                </div>
+                <a href="#" class="nav-text" id="nav-enter" data-page="authorization">Вход</a>
+            </li>
+        </ul>
+    </header>
+
+    <main id="main">
+
+    </main>
+
+    <footer>
+        <p class = "footer-text">© 2022 - Блог №415</p>
+    </footer>
+    <script type="module" src="/src/pages/authorization/auth.js" defer></script>
+    <script type="module" src="/src/pages/registration/register.js" defer></script>
+    <script type="module" src="/src/pages/profile/profile.js" defer></script>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>

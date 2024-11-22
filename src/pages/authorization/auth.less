@@ -1,0 +1,63 @@
+@import '../../general-less/main.less';
+
+@text-dark-color: #2f2f2f;
+@button-dark-color: #6c757d;
+@button-blue-color: #0b6ffd;
+@border: #ebeced;
+@shadow: darken(#f8f9fa, 4%);
+
+.form-auth {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    width: 550px;
+    gap: 12px;
+    padding: 20px;
+    box-shadow: 0px 0px 6px 6px @shadow;
+    border-radius: 4px;
+    border: 1px solid @border;
+    h3 {
+        color: @text-dark-color;
+        font-size: 28px;
+    }
+    
+    .form-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+    }
+    
+    .form-input {
+        text-indent: 5px;
+        height: 40px;
+    }
+
+    .button {
+        height: 40px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 15px;
+    }
+    
+    #button-enter {
+        background: @button-blue-color;
+    }
+    
+    #button-page-register {
+        background: @button-dark-color;
+    }
+
+    #error {
+        color: red;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .form-auth {
+        min-width: 200px;
+    }
+}
+

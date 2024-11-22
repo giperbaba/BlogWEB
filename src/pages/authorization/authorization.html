@@ -1,0 +1,19 @@
+<form class="form-auth" method="POST">
+    <h3>Вход</h3>
+    <div class="form-item">
+        <label>Email</label>
+    <input class="form-input" type="email" name="email" id="email" placeholder="name@example.com" required>
+    </div>
+    
+    <div class="form-item">
+        <label>Пароль</label>
+    <input class="form-input" type="password" name="password" id="password" minlength="6" required>
+    </div>
+
+    <p id="error"></p>
+
+    <button class="button" id="button-enter" data-page='profile'>Войти</button>
+    <button class="button" id="button-page-register" data-page='registration'>Зарегистрироваться</button>
+</form>
+<link rel="stylesheet" href="/src/pages/authorization/auth.css">
+<script type="module" src="auth.js" defer></script>
