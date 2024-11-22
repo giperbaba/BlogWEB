@@ -1,13 +1,13 @@
-import {navigate} from '../main/main.js'
+import { navigate } from '../general/general.js'
 
-async function sendRequestLogin (page, email, password) {
+async function sendRequestLogin(page, email, password) {
     try {
         const response = await fetch('https://blog.kreosoft.space/api/account/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({email, password}),
+            body: JSON.stringify({ email, password }),
         })
 
         if (response.ok) {
@@ -25,11 +25,11 @@ async function sendRequestLogin (page, email, password) {
         }
     }
     catch (error) {
-        throw error; 
+        alert(`Error: ${error.message || "Unknown error"}`);
     }
 }
 
-export async function login (page) {
+export async function login(page) {
     const formData = new FormData(document.querySelector('.form-auth'));
 
     const email = formData.get('email');

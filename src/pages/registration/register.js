@@ -1,6 +1,6 @@
-import {navigate} from '../main/main.js'
+import { navigate } from '../general/general.js'
 
-async function sendRequestRegister (page, data) {
+async function sendRequestRegister(page, data) {
     try {
         const response = await fetch('https://blog.kreosoft.space/api/account/register', {
             method: 'POST',
@@ -17,13 +17,13 @@ async function sendRequestRegister (page, data) {
             localStorage.setItem('token', token);
             navigate(page)
         }
-        
+
         else { showError(response); }
     }
-    catch (error) { throw error; }i
+    catch (error) { alert(`Error: ${error.message || "Unknown error"}`); } 
 }
 
-export async function register (page) {
+export async function register(page) {
     const formData = new FormData(document.querySelector('.form-register'));
 
     const fullName = formData.get('fullName');
@@ -35,7 +35,7 @@ export async function register (page) {
 
     sendRequestRegister(page, {
         fullName,
-        password, 
+        password,
         email,
         birthDate,
         gender,
@@ -43,7 +43,7 @@ export async function register (page) {
     });
 }
 
-async function showError (response) {
+async function showError(response) {
     if (response.status === 400) {
         const errorData = await response.json();
         const errorElement = document.getElementById("error");

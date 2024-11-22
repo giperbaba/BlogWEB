@@ -1,10 +1,10 @@
-import {login} from '../authorization/auth.js'
-import {register} from '../registration/register.js'
+import { login } from '../authorization/auth.js'
+import { register } from '../registration/register.js'
 
-import {edit} from '../profile/profile.js'
-import {logout} from '../profile/profile.js'
-import {getResponseProfile} from '../profile/profile.js'
-import {showProfile} from '../profile/profile.js'
+import { edit } from '../profile/profile.js'
+import { logout } from '../profile/profile.js'
+import { getResponseProfile } from '../profile/profile.js'
+import { showProfile } from '../profile/profile.js'
 
 export function navigate(page) {
     const pages = {
@@ -22,11 +22,11 @@ export function navigate(page) {
         alert('Время сеанса истекло');
         return navigate('authorization');
     }
-    
+
     fetch(url)
         .then(response => {
             if (!response.ok) throw new Error("Page not found");
-            return response.text(); 
+            return response.text();
         })
         .then(html => {
             document.getElementById('main').innerHTML = html;
@@ -36,7 +36,7 @@ export function navigate(page) {
             if (page === 'profile') {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    getResponseProfile(token) 
+                    getResponseProfile(token)
                         .then(profile => {
                             showProfile(profile);
                             editHeaderProfilePage(profile)
@@ -67,10 +67,10 @@ if (window.location.hash) {
 }
 
 document.querySelectorAll('.nav-text').forEach(item => {
-    item.addEventListener('click', function(event) {
-        event.preventDefault();  
+    item.addEventListener('click', function (event) {
+        event.preventDefault();
         const page = item.getAttribute('data-page');
-        navigate(page); 
+        navigate(page);
     });
 });
 
@@ -79,19 +79,19 @@ document.getElementById('main').addEventListener('click', async function (event)
 
     if (!target) return;
 
-    const page = target.getAttribute('data-page'); 
+    const page = target.getAttribute('data-page');
     event.preventDefault();
 
     switch (target.id) {
-        case 'button-page-register': 
-            navigate(page); 
+        case 'button-page-register':
+            navigate(page);
             break;
 
         case 'button-enter':
-            const formAuth = document.querySelector('.form-auth'); 
+            const formAuth = document.querySelector('.form-auth');
             if (formAuth && formAuth.checkValidity()) {
-                login(page); 
-            } 
+                login(page);
+            }
             else {
                 formAuth?.reportValidity();
             }
@@ -101,17 +101,17 @@ document.getElementById('main').addEventListener('click', async function (event)
             const formRegister = document.querySelector('.form-register');
             if (formRegister && formRegister.checkValidity()) {
                 register(page);
-            } 
+            }
             else {
                 formRegister?.reportValidity();
             }
-            break; 
-        
+            break;
+
         case 'button-save-edit':
             const formEdit = document.querySelector('.form-profile');
             if (formEdit && formEdit.checkValidity()) {
                 edit();
-            } 
+            }
             else {
                 formEdit?.reportValidity();
             }
@@ -129,7 +129,7 @@ document.getElementById('main').addEventListener('click', async function (event)
 
 function handlePhoneInput(e) {
     const input = e.target;
-    let value = input.value.replace(/\D/g, ''); 
+    let value = input.value.replace(/\D/g, '');
 
     if (value.startsWith('7') || value.startsWith('8')) {
         value = value.slice(1);
@@ -151,28 +151,16 @@ function editHeaderProfilePage(profile) {
     menuDropdown.style.display = "block";
     menuUserMailText.textContent = `${profile.email} ▼`;
 
-    const buttonDropdownProfile = document.getElementById("button-profile");
-    const buttonDropdownLogout = document.getElementById("button-logout");
+    menuDropdown.removeEventListener('click', openDropdownMenu);
+    menuDropdown.addEventListener('click', openDropdownMenu);
 
-     menuDropdown.removeEventListener('click', toggleDropdown);
-
-     menuDropdown.addEventListener('click', toggleDropdown);
-
-    buttonDropdownProfile.addEventListener('click', function(event) {
-        event.preventDefault(); 
-        navigate('profile');
-    })
-
-    buttonDropdownLogout.addEventListener('click', function(event) {
-        event.preventDefault(); 
-        logout();
-        navigate('authorization');
-    })
+    setupLogoutHandler();
+    setupProfileHandler();
 }
 
 function editHeaderMailForButtonEnter() {
     const buttonEnter = document.getElementById("nav-enter");
-    const menuDropdown = document.getElementById("dropdown-menu"); 
+    const menuDropdown = document.getElementById("dropdown-menu");
     const buttonWritePost = document.getElementById("button-write-post");
 
     buttonWritePost.style.display = "none";
@@ -180,8 +168,33 @@ function editHeaderMailForButtonEnter() {
     menuDropdown.style.display = "none";
 }
 
-function toggleDropdown(event) {
-    console.log('клик');
+function openDropdownMenu(event) {
+    event.preventDefault();
     const dropdownContent = document.getElementById("dropdown-content");
     dropdownContent.style.display = dropdownContent.style.display === 'none' ? 'flex' : 'none';
+}
+
+function handleProfile(event) {
+    event.preventDefault();
+        navigate('profile');
+}
+
+function handleLogout(event) {
+    event.preventDefault();
+    logout();
+    navigate('authorization');
+}
+
+function setupProfileHandler() {
+    const buttonDropdownProfile = document.getElementById("button-profile");
+
+    buttonDropdownProfile.removeEventListener('click', handleProfile);
+    buttonDropdownProfile.addEventListener('click', handleProfile);
+}
+
+function setupLogoutHandler() {
+    const buttonDropdownLogout = document.getElementById("button-logout");
+
+    buttonDropdownLogout.removeEventListener('click', handleLogout);
+    buttonDropdownLogout.addEventListener('click', handleLogout);
 }
