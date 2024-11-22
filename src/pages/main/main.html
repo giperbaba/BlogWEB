@@ -1,0 +1,55 @@
+<div id="page-post">
+    
+    <button class="button" id="button-write-post">Написать пост</button>
+    <div class="container-filters">
+        <div class="text-heading">Фильтры</div>
+
+        <form id="form-filters">
+    
+            <div class="filter-item" id="input-search-by-name">
+                <label for="input-search-by-name">Поиск по имени автора</label>
+                <input class="form-input" type="text" name="input-search-by-name">
+            </div>
+    
+            <div class="filter-item" id="search-tag">
+                <label for="search-tag">Поиск по тэгам</label>
+                <select multiple name="search-tag" id="select-search-tag">
+
+                </select>
+            </div>
+    
+            <div class="filter-item" id="sort-by">
+                <label for="sort-by">Сортировать</label>
+                <select class="form-input" name="sort-by" id="select-sort-by">
+                    <option value="CreateDesc">По дате создания (сначала новые)</option>
+                    <option value="CreateAsc">По дате создания (сначала старые)</option>
+                    <option value="LikeDesc">По количеству лайков (по убыванию)</option>
+                    <option value="LikeAsc">По количеству лайков (по возрастанию)</option>
+                </select>
+            </div>
+    
+            <div class="filter-item" id="read-time-min">
+                <label for="read-time-min">Время чтения от</label>
+                <input type="text" class="form-input" name="read-time-min" >
+            </div>
+    
+            <div class="filter-item" id="read-time-max">
+                <label for="read-time-max">Время чтения до</label>
+                <input type="text" class="form-input" name="read-time-max">
+            </div>
+            
+            <div class="filter-item" id="filter-item-checkbox">
+                <input type="checkbox" name="are-only-my-communities" id="are-only-my-communities">
+                <label for="are-only-my-communities">
+                    Только мои группы
+                </label>
+            </div>
+            <button class="button" id="button-apply-filters">Применить</button>
+        </form>
+    </div>
+    
+</div>
+
+<link rel="stylesheet" href="/src/pages/main/main.css">
+<script type="module" src="/src/pages/main/main.js"></script>
+<script type="module" src="/src/utils/tag.js"></script>

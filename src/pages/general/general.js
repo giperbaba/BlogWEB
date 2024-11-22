@@ -6,12 +6,16 @@ import { logout } from '../profile/profile.js'
 import { getResponseProfile } from '../profile/profile.js'
 import { showProfile } from '../profile/profile.js'
 
+import { pushTags } from '../main/main.js'
+
 export function navigate(page) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
         registration: '/src/pages/registration/registration.html',
         profile: '/src/pages/profile/profile.html',
+        main: '/src/pages/main/main.html'
     };
+
 
     const url = pages[page];
 
@@ -47,6 +51,10 @@ export function navigate(page) {
 
             if (page === 'authorization') {
                 editHeaderMailForButtonEnter();
+            }
+
+            if (page === 'main') {
+                pushTags();
             }
 
         })

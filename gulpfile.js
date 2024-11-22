@@ -2,11 +2,11 @@ const gulp = require('gulp');
 const less = require('gulp-less');
 const cleanCss = require('gulp-clean-css');
 
-gulp.task('less-main', function() {
-    return gulp.src('./src/pages/main/style.less')
+gulp.task('less-general', function() {
+    return gulp.src('./src/pages/general/style.less')
         .pipe(less())
         .pipe(cleanCss())
-        .pipe(gulp.dest('./src/pages/main'));
+        .pipe(gulp.dest('./src/pages/general'));
 })
 
 gulp.task('less-registration', function() {
@@ -30,12 +30,20 @@ gulp.task('less-profile', function() {
         .pipe(gulp.dest('./src/pages/profile'));
 })
 
+gulp.task('less-main', function() {
+    return gulp.src('./src/pages/main/main.less')
+        .pipe(less())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./src/pages/main'));
+})
+
 gulp.task('watch', function() {
-    gulp.watch('./src/pages/main/style.less', gulp.series('less-main'));
+    gulp.watch('./src/pages/general/style.less', gulp.series('less-general'));
     gulp.watch('./src/pages/authorization/auth.less', gulp.series('less-authorization'));
     gulp.watch('./src/pages/registration/register.less', gulp.series('less-registration'));
     gulp.watch('./src/pages/profile/profile.less', gulp.series('less-profile'));
+    gulp.watch('./src/pages/main/main.less', gulp.series('less-main'));
 })
 
-gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-main', 'less-profile'));
+gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-main', 'less-profile', 'less-general', 'less-main'));
 gulp.task('default', gulp.series('less', 'watch'));
