@@ -87,12 +87,6 @@
                 flex-direction: row;
                 align-items: center;
                 margin-top: 6px;
-
-                #are-only-my-communities {
-                    position: relative;
-                    z-index: 2;
-                    pointer-events: auto;
-                }
             }
 
         }
@@ -112,4 +106,29 @@
     #button-write-post {
         margin-right: 10px;
     }
+
+    .posts {
+        display: grid;
+        
+    }
 }
+
+@media screen and (max-width: 900px) {
+    #page-post {
+        width: 90%;
+
+        #form-filters {
+            gap: 8px;
+            display: flex !important;
+            
+            align-items: start !important;
+            flex-direction: column !important;
+
+            #button-apply-filters {
+                margin-bottom: 10px;
+                align-self: end;
+            }
+        }
+    }
+}
+ 

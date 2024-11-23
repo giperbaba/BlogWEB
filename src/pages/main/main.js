@@ -19,5 +19,3 @@ export async function pushTags() {
 
     catch(error) { alert(`Error: ${error.message || "Unknown error"}`); } 
 }
-
-document.addEventListener('DOMContentLoaded', pushTags);

@@ -8,6 +8,8 @@ import { showProfile } from '../profile/profile.js'
 
 import { pushTags } from '../main/main.js'
 
+import { getPosts } from '../main/post/post.js'
+
 export function navigate(page) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
@@ -88,7 +90,6 @@ document.getElementById('main').addEventListener('click', async function (event)
     if (!target) return;
 
     const page = target.getAttribute('data-page');
-    event.preventDefault();
 
     switch (target.id) {
         case 'button-page-register':
@@ -123,6 +124,10 @@ document.getElementById('main').addEventListener('click', async function (event)
             else {
                 formEdit?.reportValidity();
             }
+            break;
+
+        case 'button-apply-filters':
+            getPosts();
             break;
 
         default:
