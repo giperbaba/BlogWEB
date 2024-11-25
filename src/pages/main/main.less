@@ -94,8 +94,8 @@
                     flex-direction: row;
                     align-items: center;
                     margin-top: 6px;
+                    
                 }
-    
             }
         }
     }
@@ -109,6 +109,12 @@
         border-radius: 4px;
         font-size: 15px;
         background: @button-blue-color;
+    }
+
+    #error {
+        color: red;
+        margin-top: 10px;
+        margin-left: 10px;
     }
 
     #button-write-post {
@@ -129,8 +135,42 @@
         gap: 0px;
 
         .button-paginaton {
+            background-color: white;
+            border: 1px solid @button-blue-color;
+            color: @button-blue-color;
+            border-radius: 2px;
             width: 30px;
             height: 30px;
+            align-self: end;
+        }
+
+        .button-paginaton:hover {
+            background-color: @button-blue-color;
+            color: white;
+        }
+
+        #second-button-page {
+           
+        }
+
+        #third-button-page {
+            
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            height: 50px;
+
+            .form-input {
+                height: 30px;
+                text-indent: 5px;
+            }
+        }
+
+        #posts-count-pagination {
+            margin-left: auto;
         }
     }
 }

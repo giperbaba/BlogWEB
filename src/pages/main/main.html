@@ -45,27 +45,28 @@
                         Только мои группы
                     </label>
                 </div>
-                <button class="button" id="button-apply-filters">Применить</button>
+                <button class="button" id="button-apply-filters" type="button">Применить</button>
             </form>
         </div>
+        <p id="error"></p>
     </div>
     
    
     <div class="container-posts"></div>
-    <div class="container-pagination">
-        <button class="button-paginaton">⟲</button>
-        <button class="button-paginaton">1</button>
-        <button class="button-paginaton">2</button>
-        <button class="button-paginaton">3</button>
-        <button class="button-paginaton">⟳</button>
     
-    </div>
-</div>
+    <div class="container-pagination">
+        <button class="button-paginaton" id="button-prev-page-posts">&lt;</button>
+        <button class="button-paginaton" id="first-button-page">1</button>
+        <button class="button-paginaton" id="second-button-page">2</button>
+        <button class="button-paginaton" id="third-button-page">3</button>
+        <button class="button-paginaton" id="button-next-page-right">&gt;</button>
 
-<link rel="stylesheet" href="/src/pages/main/main.css">
-<script type="module" src="/src/pages/main/main.js"></script>
-<script type="module" src="/src/utils/tag.js"></script>
-<script type="module" src="/src/pages/main/post/post.js"></script>
+        <div class="filter-item" id="posts-count-pagination">
+            <label for="sort-by">Число постов на странице</label>
+            <select class="form-input" name="posts-count" id="posts-count">
+            </select>
+        </div>
+    </div>
 </div>
 
 <link rel="stylesheet" href="/src/pages/main/main.css">

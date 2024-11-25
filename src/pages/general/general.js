@@ -7,8 +7,10 @@ import { getResponseProfile } from '../profile/profile.js'
 import { showProfile } from '../profile/profile.js'
 
 import { pushTags } from '../main/main.js'
+import { generatePostOptions } from '../main/main.js'
 
 import { getPosts } from '../main/post/post.js'
+
 
 export function navigate(page) {
     const pages = {
@@ -55,6 +57,7 @@ export function navigate(page) {
             }
 
             if (page === 'main') {
+                generatePostOptions();
                 pushTags();
             }
 
@@ -84,7 +87,7 @@ document.querySelectorAll('.nav-text').forEach(item => {
 });
 
 document.getElementById('main').addEventListener('click', async function (event) {
-    event.preventDefault();
+    //event.preventDefault(); влияет на вход в аккаунт и на работоспособность checkbox
     
     const target = event.target;
 
@@ -100,6 +103,7 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-enter':
             const formAuth = document.querySelector('.form-auth');
             if (formAuth && formAuth.checkValidity()) {
+                event.preventDefault();
                 login(page);
             }
             else {
@@ -110,6 +114,7 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-register':
             const formRegister = document.querySelector('.form-register');
             if (formRegister && formRegister.checkValidity()) {
+                event.preventDefault();
                 register(page);
             }
             else {
@@ -128,8 +133,36 @@ document.getElementById('main').addEventListener('click', async function (event)
             break;
 
         case 'button-apply-filters':
-            getPosts();
+            let currentPageData = await getPosts();
+            let currentPage = currentPageData.pagination.current;
+            let countPages = currentPageData.pagination.count;
+
+            console.log(currentPage);
+            
+            const firstButtonPage = document.getElementById('first-button-page');
+            const secondButtonPage = document.getElementById('second-button-page');
+            const thirdButtonPage = document.getElementById('third-button-page');
+            
+            firstButtonPage.textContent = currentPage;
+            
+            firstButtonPage.style.backgroundColor = '#0b6ffd';
+            firstButtonPage.style.color = 'white';
+
+            if (countPages >= currentPage + 1) {
+                secondButtonPage.textContent = currentPage + 1;
+            }
+            else if (countPages >= currentPage + 2) {
+                thirdButtonPage.textContent = currentPage + 2;
+            }
+            else if (countPages < currentPage + 1) {
+                secondButtonPage.style.visibility = 'hidden';
+            }
+            else {
+                secondButtonPage.style.visibility = 'hidden';
+                thirdButtonPage.style.visibility = 'hidden';
+            }
             break;
+
 
         default:
             break;
@@ -140,6 +173,24 @@ document.getElementById('main').addEventListener('click', async function (event)
         phoneInput.addEventListener('input', handlePhoneInput);
     }
 });
+
+/*document.getElementById('main').addEventListener('change', async function (event) {
+    //event.preventDefault();
+    
+    const target = event.target;
+
+    if (!target) return;
+    switch (target.id) {
+    
+        case 'posts-count':
+            console.log(document.getElementById('posts-count').value)
+            await getPosts();
+            break;
+
+        default:
+            break;
+    }
+});*/
 
 function handlePhoneInput(e) {
     const input = e.target;
@@ -211,4 +262,44 @@ function setupLogoutHandler() {
 
     buttonDropdownLogout.removeEventListener('click', handleLogout);
     buttonDropdownLogout.addEventListener('click', handleLogout);
+}
+
+async function updatePagination() {
+    const currentPageData = await getPosts();
+    const currentPage = currentPageData.pagination.current;
+    const countPages = currentPageData.pagination.count;
+
+    const firstButtonPage = document.getElementById('first-button-page');
+    const secondButtonPage = document.getElementById('second-button-page');
+    const thirdButtonPage = document.getElementById('third-button-page');
+    const buttonPrevPage = document.getElementById('button-prev-page-posts');
+    const buttonNextPage = document.getElementById('button-next-page-right');
+
+    firstButtonPage.textContent = currentPage;
+
+    if (countPages >= currentPage + 1) {
+        secondButtonPage.textContent = currentPage + 1;
+        secondButtonPage.style.visibility = 'visible';
+    } else {
+        secondButtonPage.style.visibility = 'hidden';
+    }
+
+    if (countPages >= currentPage + 2) {
+        thirdButtonPage.textContent = currentPage + 2;
+        thirdButtonPage.style.visibility = 'visible';
+    } else {
+        thirdButtonPage.style.visibility = 'hidden';
+    }
+
+    if (countPages <= 1) {
+        firstButtonPage.style.visibility = 'visible';
+        secondButtonPage.style.visibility = 'hidden';
+        thirdButtonPage.style.visibility = 'hidden';
+    }
+
+    buttonPrevPage.style.visibility = currentPage > 1 ? 'visible' : 'hidden';
+    buttonNextPage.style.visibility = currentPage < countPages ? 'visible' : 'hidden';
+
+    firstButtonPage.style.backgroundColor = '#0b6ffd';
+    firstButtonPage.style.color = 'white';
 }

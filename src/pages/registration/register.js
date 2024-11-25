@@ -15,9 +15,8 @@ async function sendRequestRegister(page, data) {
             const token = data.token;
 
             localStorage.setItem('token', token);
-            navigate(page)
+            navigate(page);
         }
-
         else { showError(response); }
     }
     catch (error) { alert(`Error: ${error.message || "Unknown error"}`); } 
