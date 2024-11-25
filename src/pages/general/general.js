@@ -18,7 +18,6 @@ export function navigate(page) {
         main: '/src/pages/main/main.html'
     };
 
-
     const url = pages[page];
 
     const protectedPages = ['profile'];
@@ -85,6 +84,8 @@ document.querySelectorAll('.nav-text').forEach(item => {
 });
 
 document.getElementById('main').addEventListener('click', async function (event) {
+    event.preventDefault();
+    
     const target = event.target;
 
     if (!target) return;
