@@ -1,6 +1,10 @@
+@import '../../general-less/general.less';
+
 @button-blue-color: #0b6ffd;
 @border: #ebeced;
 @heading-background: #f7f7f7;
+@text-grey-color: darken(#54595e, 10%);
+@text-light-grey-color: #7a7f86;
 
 #page-post {
     display: grid;
@@ -8,9 +12,9 @@
     height: 100%;
     width: 70%;
     grid-template-areas:
-    "header"
-    "main"
-    "footer";
+        "header"
+        "main"
+        "footer";
     grid-template-rows: auto 1fr auto;
 
     .grid-header {
@@ -22,79 +26,80 @@
             border-radius: 4px;
             border: 1px solid @border;
             margin-top: 20px;
-    
+
             .text-heading {
                 background-color: @heading-background;
                 padding: 8px;
             }
-    
+
             #form-filters {
                 display: grid;
                 grid-template-columns: repeat(6, 1fr);
                 grid-template-rows: repeat(2, 1fr);
-    
+
                 align-items: center;
                 justify-content: center;
-    
+
                 column-gap: 10px;
                 padding: 15px;
                 padding-bottom: 0px;
-    
+
                 .filter-item {
                     display: flex;
                     flex-direction: column;
                     gap: 2px;
                     height: 50px;
-    
+
                     .form-input {
                         height: 30px;
                         text-indent: 5px;
                     }
                 }
-    
+
                 #input-search-by-name {
                     align-self: start;
                     grid-column-start: 1;
                     grid-column-end: span 3;
                 }
-    
+
                 #search-tag {
                     grid-column-start: 4;
                     grid-column-end: span 3;
                     height: 80px;
-    
+
                     #select-search-tag {
                         text-indent: 5px;
                     }
                 }
-    
+
                 #sort-by {
                     grid-column-start: 1;
                     grid-column-end: span 2;
                 }
-    
+
                 #read-time-min {
                     grid-column-start: 3;
                     grid-column-end: span 1;
                 }
-    
+
                 #read-time-max {
                     grid-column-start: 4;
                     grid-column-end: span 1;
                 }
-    
+
                 #button-apply-filters {
                     grid-column-start: 6;
-                    grid-column-end: span 1;               
+                    grid-column-end: span 1;
                 }
-    
+
                 #filter-item-checkbox {
                     grid-column-start: 5;
                     grid-column-end: span 1;
+                    display: flex;
                     flex-direction: row;
                     align-items: center;
                     margin-top: 6px;
-                    
+                    gap: 6px;
                 }
             }
         }
@@ -125,7 +130,108 @@
 
     .container-posts {
         grid-area: main;
-        display: grid;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .post {
+            display: grid;
+            grid-template-areas:
+                "header"
+                "main"
+                "footer";
+
+            border-radius: 4px;
+            border: 1px solid @border;
+
+            .header-post {
+                grid-area: header;
+                display: flex;
+                flex-direction: column;
+
+                border-bottom: 1px solid @border;
+                gap: 10px;
+                margin: 10px;
+                margin-bottom: 0px;
+                padding-bottom: 10px;
+
+
+                .container-author-date {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 2px;
+                    font-size: 92%;
+                }
+
+                .post-name {
+                    font-weight: bold; 
+                    font-size: 20px;
+                    color: @text-grey-color;
+                }
+            }
+
+            .main-post {
+                grid-area: main;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 12px;
+
+                .post-tags {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 8px;
+                    padding-top: 6px;
+                }
+    
+                .post-img {
+                    align-self: center;
+                    width: 22rem;
+                }
+
+                .tag {
+                    color: @text-light-grey-color;
+                    font-size: 92%;
+                }
+            }
+
+            .footer-post {
+                grid-area: footer;
+                border-top: 1px solid @border;
+                background-color: @heading-background;
+                display: flex;
+                flex-direction: row;
+                padding: 12px;
+                align-items: center;
+
+
+                .icon {
+                    width: 15px;
+                    height: 15px;
+                }
+
+                .container-comment {
+                    display: flex;
+                    flex-direction: row;
+                    margin-right: auto;
+                    gap: 1px;
+                    font-size: 95%;
+
+                    #icon-comment {}
+                }
+
+                .container-like {
+                    display: flex;
+                    flex-direction: row;
+                    margin-left: auto;
+                    gap: 1px;
+                    font-size: 95%;
+
+                    #icon-heart {}
+                }
+
+            }
+        }
     }
 
     .container-pagination {
@@ -147,14 +253,6 @@
         .button-paginaton:hover {
             background-color: @button-blue-color;
             color: white;
-        }
-
-        #second-button-page {
-           
-        }
-
-        #third-button-page {
-            
         }
 
         .filter-item {
@@ -182,7 +280,7 @@
         #form-filters {
             gap: 8px;
             display: flex !important;
-            
+
             align-items: start !important;
             flex-direction: column !important;
 

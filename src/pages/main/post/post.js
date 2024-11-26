@@ -1,4 +1,4 @@
-async function getFiltersForGetPosts() {
+async function getFiltersForGetPosts(currentPage) {
 
     const formData = new FormData(document.querySelector('#form-filters'));
     if (!formData) {
@@ -12,7 +12,7 @@ async function getFiltersForGetPosts() {
     const max = formData.get('read-time-max')|| null;
     const sorting = formData.get('sort-by') || 'CreateDesc';
     const onlyMyCommunities = formData.get('are-only-my-communities')? true : false;
-    const page = 1;
+    const page = currentPage;
     const size = document.getElementById('posts-count').value || 1;
 
     const searchParams = new URLSearchParams();
@@ -49,9 +49,9 @@ async function getFiltersForGetPosts() {
     return searchParams;
 }
 
-export async function getPosts() {
+export async function getPosts(page = 1) {
     const currentToken = localStorage.getItem('token') || null;
-    const searchParams = await getFiltersForGetPosts();
+    const searchParams = await getFiltersForGetPosts(page);
 
     if (!searchParams) { return; }
 
@@ -79,5 +79,3 @@ export async function getPosts() {
         console.error('Fetch error:', error);
     }
 }
-
-
