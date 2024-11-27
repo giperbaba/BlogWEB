@@ -9,3 +9,25 @@ export function formatDateTime(isoString) {
 
     return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
+
+export function getTruncateDescription(description, maxLength) {
+    if (description.length > maxLength) {
+        let truncatedDesc = description.slice(0, maxLength);
+        
+        const lastPunctuationIndex = Math.max(
+            truncatedDesc.lastIndexOf('.'),
+            truncatedDesc.lastIndexOf('!'),
+            truncatedDesc.lastIndexOf('?')
+        );
+
+        if (lastPunctuationIndex !== -1) {
+            truncatedDesc = truncatedDesc.slice(0, lastPunctuationIndex + 1);
+        }
+
+
+        return truncatedDesc + '...';
+    } 
+    else {
+        return description;
+    }
+}

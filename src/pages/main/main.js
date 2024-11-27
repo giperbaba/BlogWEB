@@ -1,6 +1,7 @@
 import { getTags } from '../../utils/tag.js';
 
 import { formatDateTime } from '../../utils/utils.js';
+import { getTruncateDescription } from '../../utils/utils.js'
 
 export async function pushTags() {
     try {
@@ -43,11 +44,11 @@ export async function updatePagination(currentPageData) {
     const thirdButtonPage = document.getElementById('third-button-page');
 
     const pages = [
-        (currentPageData.pagination.current - 1) > 0 ? currentPageData.pagination.current - 1 : 
-        currentPageData.pagination.count,
+        (currentPageData.pagination.current - 1) > 0 ? currentPageData.pagination.current - 1 :
+            currentPageData.pagination.count,
         currentPage,
-        (currentPageData.pagination.current + 1) <= currentPageData.pagination.count ? 
-        currentPageData.pagination.current + 1 : 1,
+        (currentPageData.pagination.current + 1) <= currentPageData.pagination.count ?
+            currentPageData.pagination.current + 1 : 1,
     ];
 
     firstButtonPage.textContent = pages[0];
@@ -87,136 +88,138 @@ export async function showPosts(currentPageData) {
     const posts = currentPageData.posts;
 
     posts.forEach(async post => {
-       container.appendChild(await getConcretePostHtml(post));
+        container.appendChild(await getConcretePostHtml(post));
     });
 }
 
 export async function getConcretePostHtml(post) {
     const postDiv = document.createElement('div');
-        postDiv.classList.add('post');
+    postDiv.classList.add('post');
 
-        const headerPost = document.createElement('div');
-        headerPost.classList.add('header-post');
+    const headerPost = document.createElement('div');
+    headerPost.classList.add('header-post');
 
-        const postAuthorDateContainer = document.createElement('div');
-        postAuthorDateContainer.classList.add('container-author-date');
+    const postAuthorDateContainer = document.createElement('div');
+    postAuthorDateContainer.classList.add('container-author-date');
 
-        const postTextAboutAuthor = document.createElement('p');
-        postTextAboutAuthor.classList.add('post-text-about-author');
-        postTextAboutAuthor.textContent = post.author + ' - ';
+    const postTextAboutAuthor = document.createElement('p');
+    postTextAboutAuthor.classList.add('post-text-about-author');
+    postTextAboutAuthor.textContent = post.author + ' - ';
 
-        const postData = document.createElement('div');
-        postData.classList.add('post-data');
-        postData.textContent = formatDateTime(post.createTime);
+    const postDate = document.createElement('div');
+    postDate.classList.add('post-data');
+    postDate.textContent = formatDateTime(post.createTime);
 
-        postAuthorDateContainer.appendChild(postTextAboutAuthor);
-        postAuthorDateContainer.appendChild(postData);
+    postAuthorDateContainer.appendChild(postTextAboutAuthor);
+    postAuthorDateContainer.appendChild(postDate);
 
-        const postName = document.createElement('p');
-        postName.classList.add('post-name');
-        postName.id = 'button-concrete-post';
-        postName.setAttribute('data-post-id', post.id);
-        postName.setAttribute('data-page', 'concrete');
-        postName.textContent = post.title;
+    const postName = document.createElement('a');
+    postName.setAttribute('href', '#');
+    postName.classList.add('post-name');
+    postName.id = 'button-concrete-post';
+    postName.setAttribute('data-post-id', post.id);
+    postName.setAttribute('data-page', 'concrete');
+    postName.textContent = post.title;
 
-        headerPost.appendChild(postAuthorDateContainer);
-        headerPost.appendChild(postName)
+    headerPost.appendChild(postAuthorDateContainer);
+    headerPost.appendChild(postName)
 
-        const mainPost = document.createElement('div');
-        mainPost.classList.add('main-post');
+    const mainPost = document.createElement('div');
+    mainPost.classList.add('main-post');
 
-        if (post.image) {
-            const postImg = document.createElement('img');
-            postImg.classList.add('post-img');
-            postImg.src = post.image;
-            postImg.alt = post.title;
-            mainPost.appendChild(postImg);
-        }
+    if (post.image) {
+        const postImg = document.createElement('img');
+        postImg.classList.add('post-img');
+        postImg.src = post.image;
+        postImg.alt = post.title;
+        mainPost.appendChild(postImg);
+    }
 
-        const postDesc = document.createElement('div');
-        postDesc.classList.add('post-desc');
+    const postDesc = document.createElement('div');
+    postDesc.classList.add('post-desc');
 
-        if (post.description.length > 500) {
-            const truncatedDesc = post.description.slice(0, 500) + '...';
-            postDesc.textContent = truncatedDesc;
-        
-            const buttonReadFull = document.createElement('a');
-            buttonReadFull.id = 'button-read-full';
-            buttonReadFull.textContent = 'Читать полностью';
-            buttonReadFull.setAttribute('data-post-id', post.id);
-            postDesc.appendChild(buttonReadFull);
-        } 
-        else {
-            postDesc.textContent = post.description;
-        }
+    const description = post.description;
+    const maxLength = 500;
 
-        const postTags = document.createElement('div');
-        postTags.classList.add('post-tags');
-        const tags = post.tags;
-        if (tags.length >= 1) {
-            tags.forEach(tag => {
-                const tagHtml = document.createElement('p');
-                tagHtml.classList.add('tag');
-                tagHtml.textContent = '#' + tag.name;
-                postTags.appendChild(tagHtml);
-            });
-        }
+    const truncatedDescription = getTruncateDescription(description, maxLength);
+    postDesc.textContent = truncatedDescription;
 
-        const postReadTime = document.createElement('p');
-        postReadTime.classList.add('post-read-time');
-        postReadTime.textContent = 'Время чтения: ' + post.readingTime + ' мин.';
+    if (truncatedDescription !== description) {
+        const buttonReadFull = document.createElement('a');
+        buttonReadFull.id = 'button-read-full';
+        buttonReadFull.textContent = 'Читать полностью';
+        buttonReadFull.setAttribute('data-post-id', post.id);
+        postDesc.appendChild(buttonReadFull);
+    }
 
-        mainPost.appendChild(postDesc);
-        mainPost.appendChild(postTags);
-        mainPost.appendChild(postReadTime);
+    const postTags = document.createElement('div');
+    postTags.classList.add('post-tags');
+    const tags = post.tags;
+    if (tags.length >= 1) {
+        tags.forEach(tag => {
+            const tagHtml = document.createElement('p');
+            tagHtml.classList.add('tag');
+            tagHtml.textContent = '#' + tag.name;
+            postTags.appendChild(tagHtml);
+        });
+    }
 
-        const footerPost = document.createElement('div');
-        footerPost.classList.add('footer-post');
+    const postReadTime = document.createElement('p');
+    postReadTime.classList.add('post-read-time');
+    postReadTime.textContent = 'Время чтения: ' + post.readingTime + ' мин.';
 
-        const containerComment = document.createElement('div');
-        containerComment.classList.add('container-comment');
-        const containerLike = document.createElement('div');
-        containerLike.classList.add('container-like');
+    mainPost.appendChild(postDesc);
+    mainPost.appendChild(postTags);
+    mainPost.appendChild(postReadTime);
 
-        const amountComments = document.createElement('p');
-        amountComments.classList.add('amount-comments');
-        amountComments.textContent = post.commentsCount;
+    const footerPost = document.createElement('div');
+    footerPost.classList.add('footer-post');
 
-        const commentIcon = document.createElement('img');
-        commentIcon.src = '/src/drawable/icon-comment.png';
-        commentIcon.classList.add('icon');
-        commentIcon.setAttribute('data-post-id', post.id);
-        commentIcon.id = 'button-icon-comment';
+    const containerComment = document.createElement('div');
+    containerComment.classList.add('container-comment');
+    const containerLike = document.createElement('div');
+    containerLike.classList.add('container-like');
 
-        const amountLikes = document.createElement('p');
-        amountLikes.classList.add('amount-likes');
-        amountLikes.textContent = post.likes || 0;
+    const amountComments = document.createElement('p');
+    amountComments.classList.add('amount-comments');
+    amountComments.textContent = post.commentsCount;
+
+    const commentIcon = document.createElement('img');
+    commentIcon.src = '/src/drawable/icon-comment.png';
+    commentIcon.classList.add('icon');
+    commentIcon.setAttribute('data-post-id', post.id);
+    commentIcon.setAttribute('data-page', 'concrete');
+    commentIcon.id = 'button-icon-comment';
+
+    const amountLikes = document.createElement('p');
+    amountLikes.classList.add('amount-likes');
+    amountLikes.textContent = post.likes || 0;
 
 
-        const likeIcon = document.createElement('img');
-        if (post.hasLike) {
-            likeIcon.src = '/src/drawable/icon-heart-full.png';
-        }
-        else {
-           likeIcon.src = '/src/drawable/icon-heart-empty.png'; 
-        }
-      
-        likeIcon.classList.add('icon');
-        likeIcon.setAttribute('data-post-id', post.id);
-        likeIcon.id = 'button-icon-heart';
+    const likeIcon = document.createElement('img');
+    if (post.hasLike) {
+        likeIcon.src = '/src/drawable/icon-heart-full.png';
+    }
+    else {
+        likeIcon.src = '/src/drawable/icon-heart-empty.png';
+    }
 
-        containerComment.appendChild(amountComments);
-        containerComment.appendChild(commentIcon);
+    likeIcon.classList.add('icon');
+    likeIcon.setAttribute('data-post-id', post.id);
+    likeIcon.id = 'button-icon-heart';
 
-        containerLike.appendChild(amountLikes);
-        containerLike.appendChild(likeIcon);
+    containerComment.appendChild(amountComments);
+    containerComment.appendChild(commentIcon);
 
-        footerPost.appendChild(containerComment);
-        footerPost.appendChild(containerLike);
+    containerLike.appendChild(amountLikes);
+    containerLike.appendChild(likeIcon);
 
-        postDiv.appendChild(headerPost);
-        postDiv.appendChild(mainPost);
-        postDiv.appendChild(footerPost);
+    footerPost.appendChild(containerComment);
+    footerPost.appendChild(containerLike);
 
-        return postDiv;
+    postDiv.appendChild(headerPost);
+    postDiv.appendChild(mainPost);
+    postDiv.appendChild(footerPost);
+
+    return postDiv;
 }

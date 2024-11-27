@@ -15,9 +15,9 @@ import { updatePagination } from '../main/main.js'
 
 import { addLike } from '../main/post/post.js'
 import { deleteLike } from '../main/post/post.js'
+import { uploadConcretePostPage } from '../concrete-post/concrete-post.js'
 
-
-export function navigate(page) {
+export function navigate(page, postId = null, anchor = null) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
         registration: '/src/pages/registration/registration.html',
@@ -58,14 +58,24 @@ export function navigate(page) {
                 }
             }
 
-            if (page === 'authorization' || page === 'registration') {
+            else if (page === 'authorization' || page === 'registration') {
                 editHeaderButtons(page);
             }
 
-            if (page === 'main') {
+            else if (page === 'main') {
                 editHeaderButtons(page);
                 generatePostOptions();
                 pushTags();
+            }
+
+            else if (page === 'concrete') {
+                if (postId) {
+                    uploadConcretePostPage(postId).then(() => {
+                        if (anchor) {
+                            document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
             }
 
         })
@@ -210,9 +220,13 @@ document.getElementById('main').addEventListener('click', async function (event)
                     : Math.max(currentLikes - 1, 0);
             }
             break;
+        
+        case 'button-icon-comment':
+            navigate(target.getAttribute('data-page'), target.getAttribute('data-post-id'), 'container-comments');
+            break;
 
         case 'button-concrete-post':
-            navigate(target.getAttribute('data-page'))
+            navigate(target.getAttribute('data-page'), target.getAttribute('data-post-id'));
             break;
 
         default:
