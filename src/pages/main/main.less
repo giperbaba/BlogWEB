@@ -21,6 +21,7 @@
         grid-area: header;
         display: flex;
         flex-direction: column;
+        margin-bottom: 5px;
 
         .container-filters {
             border-radius: 4px;
@@ -187,11 +188,23 @@
                 .post-img {
                     align-self: center;
                     width: 22rem;
+                    margin: 4px;
                 }
 
                 .tag {
                     color: @text-light-grey-color;
                     font-size: 92%;
+                }
+
+                #button-read-full {
+                    color: @button-blue-color;
+                    cursor: pointer;
+                    text-decoration: underline;
+                    margin-left: 5px;
+                }
+
+                #button-read-full:hover {
+                    text-decoration: none;
                 }
             }
 

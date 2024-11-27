@@ -56,11 +56,14 @@ export async function getPosts(page = 1) {
     if (!searchParams) { return; }
 
     try {
+        const headers = {};
+        if (currentToken) {
+            headers['Authorization'] = `Bearer ${currentToken}`;
+        }
+
         const response = await fetch(`https://blog.kreosoft.space/api/post?${searchParams}`, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${currentToken}`
-            },
+            headers: headers,
         })
 
         if (response.ok) {
@@ -78,4 +81,16 @@ export async function getPosts(page = 1) {
     catch (error) {
         console.error('Fetch error:', error);
     }
+}
+
+export async function getInformationConcretePost(id) {
+
+}
+
+export async function addLike(postId) {
+    
+}
+
+export async function deleteLike(postId) {
+
 }

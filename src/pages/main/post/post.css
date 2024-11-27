@@ -1,1 +1,0 @@
-*{margin:0;padding:0;box-sizing:border-box}.post{display:grid;grid-template-areas:"header" "main" "footer"}.post .header-post{grid-area:header}.post .main-post{grid-area:main}.post .footer-post{grid-area:footer}
