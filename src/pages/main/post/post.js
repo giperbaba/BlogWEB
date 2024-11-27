@@ -73,10 +73,9 @@ export async function getPosts(page = 1) {
         }
         if (!response.ok) {
             const errorText = await response.text();
-            console.error(`Server responded with error: ${response.status} - ${errorText}`);
+            console.error(`${response.status} - ${errorText}`);
             throw new Error(errorText || 'Unknown server error');
         }
-
     }
     catch (error) {
         console.error('Fetch error:', error);
@@ -89,8 +88,8 @@ export async function getInformationConcretePost(id) {
         const response = await fetch(`https://blog.kreosoft.space/api/post/${id}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${currentToken}`
+                'Authorization': `Bearer ${currentToken}`,
+                'Content-Type': 'application/json'
             }
         });
 

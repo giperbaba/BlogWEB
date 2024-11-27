@@ -161,14 +161,28 @@
                 font-size: 92%;
             }
 
-            .post-comment-content {
-                font-size: 18px;
+            .container-content-modified {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 4px;
+
+                .post-comment-content {
+                    font-size: 18px;
+                }
+
+                .is-modified {
+                    align-self: flex-end;
+                    color: @text-light-grey-color;
+                    font-size: 92%;
+                }
             }
+
 
             .container-date-answer {
                 display: flex;
                 flex-direction: row;
-                gap: 4px;
+                gap: 5px;
 
                 .post-data {
                     font-size: 92%;

@@ -1,4 +1,5 @@
 import { navigate } from '../general/general.js'
+import { handleError } from '../../utils/utils.js';
 
 export async function sendRequestEditProfile(data) {
     const currentToken = localStorage.getItem('token');
@@ -38,6 +39,10 @@ export async function getResponseProfile(token) {
         if (response.ok) {
             const profile = await response.json();
             return profile;
+        }
+        else {
+            handleError(response);
+            return null;
         }
     }
 

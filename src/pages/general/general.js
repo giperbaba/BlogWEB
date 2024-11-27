@@ -17,6 +17,8 @@ import { addLike } from '../main/post/post.js'
 import { deleteLike } from '../main/post/post.js'
 import { uploadConcretePostPage } from '../concrete-post/concrete-post.js'
 
+import { sendComment } from '../concrete-post/concrete-post.js'
+
 export function navigate(page, postId = null, anchor = null) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
@@ -228,6 +230,16 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-concrete-post':
             navigate(target.getAttribute('data-page'), target.getAttribute('data-post-id'));
             break;
+
+        case 'button-send-comment':
+            const inputElement = document.getElementById('input-create-comment');
+            const commentContent = inputElement.value.trim();
+            if (await sendComment(target.getAttribute('data-post-id'), commentContent)) {  }
+            break;
+
+        /*case 'button-answer':
+            await sendComment(target.getAttribute('data-post-id'), target.getAttribute('data-comment-id'));
+            break;*/
 
         default:
             break;
