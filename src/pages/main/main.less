@@ -168,6 +168,7 @@
                     font-weight: bold; 
                     font-size: 20px;
                     color: @text-grey-color;
+                    cursor: pointer;
                 }
             }
 
@@ -183,17 +184,17 @@
                     flex-direction: row;
                     gap: 8px;
                     padding-top: 6px;
+
+                    .tag {
+                        color: @text-light-grey-color;
+                        font-size: 92%;
+                    }
                 }
     
                 .post-img {
                     align-self: center;
                     width: 22rem;
                     margin: 4px;
-                }
-
-                .tag {
-                    color: @text-light-grey-color;
-                    font-size: 92%;
                 }
 
                 #button-read-full {
@@ -230,7 +231,9 @@
                     gap: 1px;
                     font-size: 95%;
 
-                    #icon-comment {}
+                    #button-icon-comment {
+                        cursor: pointer;
+                    }
                 }
 
                 .container-like {
@@ -240,7 +243,9 @@
                     gap: 1px;
                     font-size: 95%;
 
-                    #icon-heart {}
+                    #button-icon-heart {
+                        cursor: pointer;
+                    }
                 }
 
             }

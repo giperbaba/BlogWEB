@@ -9,16 +9,16 @@ async function getFiltersForGetPosts(currentPage) {
     const tags = formData.getAll('search-tag');
     const author = formData.get('input-search-by-name') || null;
     const min = formData.get('read-time-min') || null;
-    const max = formData.get('read-time-max')|| null;
+    const max = formData.get('read-time-max') || null;
     const sorting = formData.get('sort-by') || 'CreateDesc';
-    const onlyMyCommunities = formData.get('are-only-my-communities')? true : false;
+    const onlyMyCommunities = formData.get('are-only-my-communities') ? true : false;
     const page = currentPage;
     const size = document.getElementById('posts-count').value || 1;
 
     const searchParams = new URLSearchParams();
- 
+
     if (tags.length > 0) {
-         tags.forEach(tag => searchParams.append('tags', tag));
+        tags.forEach(tag => searchParams.append('tags', tag));
     }
     if (author) {
         searchParams.append('author', author);
@@ -84,13 +84,91 @@ export async function getPosts(page = 1) {
 }
 
 export async function getInformationConcretePost(id) {
+    const currentToken = localStorage.getItem('token');
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/post/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentToken}`
+            }
+        });
 
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            return data;
+        }
+        else if (response.status === 400) {
+            const errorText = await response.text();
+            alert(errorText);
+        }
+        else if (response.status === 401) {
+            alert('Please, authorize');
+        }
+
+    }
+    catch (error) {
+        alert(`Error: ${error.message || "Unknown error"}`);
+    }
 }
 
 export async function addLike(postId) {
-    
+    const currentToken = localStorage.getItem('token');
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentToken}`
+            }
+        });
+
+        if (response.ok) {
+            return true;
+        }
+        else if (response.status === 400) {
+            const errorText = await response.text();
+            alert(errorText);
+        }
+        else if (response.status === 401) {
+            alert('Please, authorize');
+        }
+
+
+        return false;
+    }
+    catch (error) {
+        alert(`Error: ${error.message || "Unknown error"}`);
+    }
 }
 
 export async function deleteLike(postId) {
+    const currentToken = localStorage.getItem('token');
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}/like`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentToken}`
+            }
+        });
 
+        if (response.ok) {
+            return true;
+        }
+
+        else if (response.status === 401) {
+            alert('Please, authorize');
+        }
+
+        else if (response.status === 400) {
+            const errorText = await response.text();
+            alert(errorText);
+        }
+        return false;
+    }
+    catch (error) {
+        alert(`Error: ${error.message || "Unknown error"}`);
+    }
 }

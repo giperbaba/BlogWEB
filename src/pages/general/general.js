@@ -13,13 +13,17 @@ import { getPosts } from '../main/post/post.js'
 import { showPosts } from '../main/main.js'
 import { updatePagination } from '../main/main.js'
 
+import { addLike } from '../main/post/post.js'
+import { deleteLike } from '../main/post/post.js'
+
 
 export function navigate(page) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
         registration: '/src/pages/registration/registration.html',
         profile: '/src/pages/profile/profile.html',
-        main: '/src/pages/main/main.html'
+        main: '/src/pages/main/main.html',
+        concrete: '/src/pages/concrete-post/concrete-post.html'
     };
 
     const url = pages[page];
@@ -48,17 +52,18 @@ export function navigate(page) {
                     getResponseProfile(token)
                         .then(profile => {
                             showProfile(profile);
-                            editHeaderProfilePage(profile)
+                            editHeaderButtons(page, profile);
                         })
                         .catch(error => console.error(error));
                 }
             }
 
-            if (page === 'authorization') {
-                editHeaderMailForButtonEnter();
+            if (page === 'authorization' || page === 'registration') {
+                editHeaderButtons(page);
             }
 
             if (page === 'main') {
+                editHeaderButtons(page);
                 generatePostOptions();
                 pushTags();
             }
@@ -89,6 +94,9 @@ document.querySelectorAll('.nav-text').forEach(item => {
 });
 
 let currentPageData = null;
+let postId = null;
+let fullPost = null;
+
 document.getElementById('main').addEventListener('click', async function (event) {
     //event.preventDefault(); влияет на вход в аккаунт и на работоспособность checkbox
 
@@ -146,6 +154,7 @@ document.getElementById('main').addEventListener('click', async function (event)
             currentPageData = await getPosts(prevPage);
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
+            window.scrollTo(0, 0);
             break;
 
         case 'button-next-page-posts':
@@ -153,6 +162,7 @@ document.getElementById('main').addEventListener('click', async function (event)
             currentPageData = await getPosts(nextPage);
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
+            window.scrollTo(0, 0);
             break;
 
         case 'first-button-page':
@@ -162,24 +172,48 @@ document.getElementById('main').addEventListener('click', async function (event)
             currentPageData = await getPosts(pageChange);
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
+            window.scrollTo(0, 0);
             break;
 
         case 'button-read-full':
-            const postId = target.getAttribute('data-post-id'); 
+            postId = target.getAttribute('data-post-id');
+
+            fullPost = null; 
             const allPosts = currentPageData.posts;
-            let fullPost = null;
             allPosts.forEach(post => {
                 if (post.id === postId) {
-                    fullPost = post;
+                fullPost = post;
                 }
             });
 
             if (fullPost) {
-                const postDescElement = target.parentElement; 
-                postDescElement.textContent = fullPost.description; 
+                const postDescElement = target.parentElement;
+                postDescElement.textContent = fullPost.description;
             }
             break;
 
+        case 'button-icon-heart':
+            postId = target.getAttribute('data-post-id');
+
+            const isLiked = target.getAttribute('src') === '/src/drawable/icon-heart-empty.png';
+            const action = isLiked ? addLike : deleteLike;
+
+            if (await action(postId)) {
+                target.src = isLiked
+                    ? '/src/drawable/icon-heart-full.png'
+                    : '/src/drawable/icon-heart-empty.png';
+
+                const amountLikesElement = target.parentNode.querySelector('.amount-likes');
+                const currentLikes = parseInt(amountLikesElement.textContent) || 0;
+                amountLikesElement.textContent = isLiked
+                    ? currentLikes + 1
+                    : Math.max(currentLikes - 1, 0);
+            }
+            break;
+
+        case 'button-concrete-post':
+            navigate(target.getAttribute('data-page'))
+            break;
 
         default:
             break;
@@ -206,12 +240,12 @@ function handlePhoneInput(e) {
 
 function editHeaderProfilePage(profile) {
     const buttonEnter = document.getElementById("nav-enter");
+    const buttonWritePost = document.getElementById("button-write-post");
     const menuDropdown = document.getElementById("dropdown-menu");
     const menuUserMailText = document.getElementById("nav-mail");
-    const buttonWritePost = document.getElementById("button-write-post");
 
-    buttonWritePost.style.display = "inline";
     buttonEnter.style.display = "none";
+    buttonWritePost.style.display = "inline";
     menuDropdown.style.display = "block";
     menuUserMailText.textContent = `${profile.email} ▼`;
 
@@ -222,14 +256,40 @@ function editHeaderProfilePage(profile) {
     setupProfileHandler();
 }
 
-function editHeaderMailForButtonEnter() {
+function editHeaderAuthPage() {
     const buttonEnter = document.getElementById("nav-enter");
     const menuDropdown = document.getElementById("dropdown-menu");
     const buttonWritePost = document.getElementById("button-write-post");
+    const buttonAuthors = document.getElementById("button-authors");
+    const buttonGroups = document.getElementById("button-groups");
+
+    buttonEnter.style.display = "inline";
+    buttonWritePost.style.display = "none";
+    menuDropdown.style.display = "none";
+    buttonAuthors.style.display = "none";
+    buttonGroups.style.display = "none";
+}
+
+function editHeaderMainPage() {
+    const buttonWritePost = document.getElementById("button-write-post");
+    const buttonAuthors = document.getElementById("button-authors");
+    const buttonGroups = document.getElementById("button-groups");
 
     buttonWritePost.style.display = "none";
-    buttonEnter.style.display = "inline";
-    menuDropdown.style.display = "none";
+    buttonAuthors.style.display = "inline";
+    buttonGroups.style.display = "inline";
+}
+
+function editHeaderButtons(page, profile = null) {
+    if (page === 'authorization' || page === 'registration') {
+        editHeaderAuthPage();
+    }
+    else if (page === 'profile') {
+        editHeaderProfilePage(profile);
+    }
+    else if (page === 'main') {
+        editHeaderMainPage();
+    }
 }
 
 function openDropdownMenu(event) {

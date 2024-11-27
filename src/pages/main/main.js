@@ -80,15 +80,19 @@ export async function updatePagination(currentPageData) {
     buttonNextPage.style.visibility = countPages > 1 ? 'visible' : 'hidden';
 }
 
-
 export async function showPosts(currentPageData) {
     const container = document.getElementsByClassName('container-posts')[0];
     container.innerHTML = '';
 
     const posts = currentPageData.posts;
 
-    posts.forEach(post => {
-        const postDiv = document.createElement('div');
+    posts.forEach(async post => {
+       container.appendChild(await getConcretePostHtml(post));
+    });
+}
+
+export async function getConcretePostHtml(post) {
+    const postDiv = document.createElement('div');
         postDiv.classList.add('post');
 
         const headerPost = document.createElement('div');
@@ -110,6 +114,9 @@ export async function showPosts(currentPageData) {
 
         const postName = document.createElement('p');
         postName.classList.add('post-name');
+        postName.id = 'button-concrete-post';
+        postName.setAttribute('data-post-id', post.id);
+        postName.setAttribute('data-page', 'concrete');
         postName.textContent = post.title;
 
         headerPost.appendChild(postAuthorDateContainer);
@@ -178,16 +185,25 @@ export async function showPosts(currentPageData) {
         const commentIcon = document.createElement('img');
         commentIcon.src = '/src/drawable/icon-comment.png';
         commentIcon.classList.add('icon');
-        commentIcon.id = 'icon-comment';
+        commentIcon.setAttribute('data-post-id', post.id);
+        commentIcon.id = 'button-icon-comment';
 
         const amountLikes = document.createElement('p');
         amountLikes.classList.add('amount-likes');
         amountLikes.textContent = post.likes || 0;
 
+
         const likeIcon = document.createElement('img');
-        likeIcon.src = '/src/drawable/icon-heart-empty.png';
+        if (post.hasLike) {
+            likeIcon.src = '/src/drawable/icon-heart-full.png';
+        }
+        else {
+           likeIcon.src = '/src/drawable/icon-heart-empty.png'; 
+        }
+      
         likeIcon.classList.add('icon');
-        likeIcon.id = 'icon-heart';
+        likeIcon.setAttribute('data-post-id', post.id);
+        likeIcon.id = 'button-icon-heart';
 
         containerComment.appendChild(amountComments);
         containerComment.appendChild(commentIcon);
@@ -202,6 +218,5 @@ export async function showPosts(currentPageData) {
         postDiv.appendChild(mainPost);
         postDiv.appendChild(footerPost);
 
-        container.appendChild(postDiv);
-    });
+        return postDiv;
 }
