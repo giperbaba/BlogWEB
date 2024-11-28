@@ -46,19 +46,19 @@ export async function handleError(response) {
 
     switch (response.status) {
         case 400:
-            alert("Bad Request: Please check the request data.");
+            alert("Bad Request: Please, check data.");
             break;
         case 401:
-            alert("Unauthorized: Please log in.");
+            alert("Unauthorized: Please, authorize.");
             break;
         case 403:
             alert("Forbidden: You do not have permission to perform this action.");
             break;
         case 404:
-            alert("Not Found: The requested resource could not be found.");
+            alert("Not Found: Resource could not be found.");
             break;
         case 500:
-            alert("Internal Server Error: Please try again later.");
+            alert("Internal Server Error: Please, try again later.");
             break;
         default:
             alert(errorMessage);

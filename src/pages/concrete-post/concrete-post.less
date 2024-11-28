@@ -148,17 +148,28 @@
 
         #text-header-comments {
             font-weight: bold;
-            font-size: 18px;
+            font-size: 19px;
             color: @text-grey-color;
         }
 
         .comment {
             display: flex;
             flex-direction: column;
-            gap: 7px;
+            gap: 6px;
 
             .post-text-about-author {
-                font-size: 92%;
+                font-size: 94%;
+            }
+
+            .author-with-buttons {
+                display: flex;
+                flex-direction: row;
+                gap: 4px;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                }
             }
 
             .container-content-modified {
@@ -168,7 +179,7 @@
                 gap: 4px;
 
                 .post-comment-content {
-                    font-size: 18px;
+                    font-size: 18.5px;
                 }
 
                 .is-modified {
@@ -176,6 +187,15 @@
                     color: @text-light-grey-color;
                     font-size: 92%;
                 }
+            }
+
+            .container-reply {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-left: 8px;
+                padding: 7px;
+                border-left: 3px solid lighten(@button-blue-color, 30%);
             }
 
 
@@ -193,6 +213,38 @@
                 color: @button-blue-color;
                 cursor: pointer;
                 text-decoration: none;
+            }
+
+            .button {
+                height: 36px;
+                width: 95px;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 15px;
+            }
+
+            .container-answer-comment {
+                display: flex;
+                flex-direction: row;
+                gap: 6px;
+
+                #input-answer {
+                    width: 90%;
+                    padding: 4px;
+                }
+
+                #button-send-answer {
+                    height: 30px;
+                    width: 88px;
+                    background-color: @button-blue-color;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    //margin-left: auto;
+                }
+                
             }
         }
     }

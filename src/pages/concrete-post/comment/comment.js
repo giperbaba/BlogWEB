@@ -21,7 +21,7 @@ export async function requestGetAllReplies(commentId) {
     }
 }
 
-export async function requestAddComment(postId, data) { //{ "content": "и че теперь", "parentId": null }
+export async function requestAddComment(postId, data) { 
     const currentToken = localStorage.getItem('token');
     try {
         const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}/comment`, {

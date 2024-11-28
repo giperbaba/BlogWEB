@@ -18,6 +18,9 @@ import { deleteLike } from '../main/post/post.js'
 import { uploadConcretePostPage } from '../concrete-post/concrete-post.js'
 
 import { sendComment } from '../concrete-post/concrete-post.js'
+import { openReplies } from '../concrete-post/concrete-post.js'
+
+import { showInputAnswer } from '../concrete-post/concrete-post.js'
 
 export function navigate(page, postId = null, anchor = null) {
     const pages = {
@@ -43,7 +46,7 @@ export function navigate(page, postId = null, anchor = null) {
             if (!response.ok) throw new Error("Page not found");
             return response.text();
         })
-        .then(html => {
+        .then(async html => {
             document.getElementById('main').innerHTML = html;
 
             history.pushState({ page: page }, page, `#${page}`);
@@ -237,9 +240,19 @@ document.getElementById('main').addEventListener('click', async function (event)
             if (await sendComment(target.getAttribute('data-post-id'), commentContent)) {  }
             break;
 
-        /*case 'button-answer':
-            await sendComment(target.getAttribute('data-post-id'), target.getAttribute('data-comment-id'));
-            break;*/
+        case 'button-answer':
+            showInputAnswer(target.getAttribute('data-comment-id'));
+            break;
+
+        case 'button-open-answer':
+            await openReplies(target.getAttribute('data-comment-id'));
+            break;
+
+        case 'button-send-answer':
+            const inputAnswer = document.getElementById('input-answer');
+            const answerContent = inputAnswer.value.trim();
+            await sendComment(target.getAttribute('data-post-id'), answerContent, target.getAttribute('parent-id'));
+            break;
 
         default:
             break;
