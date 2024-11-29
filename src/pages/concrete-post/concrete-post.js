@@ -104,7 +104,7 @@ async function getCommentHtml(comment, isReply = false) {
         commentContentModifiedContainer.appendChild(commentContent);
 
         if (comment.modifiedDate) {
-            const isModified = document.createElement('a');
+            const isModified = document.createElement('p');
             isModified.classList.add('is-modified');
             isModified.textContent = '(изменен)';
             commentContentModifiedContainer.appendChild(isModified);
@@ -137,14 +137,14 @@ async function getCommentHtml(comment, isReply = false) {
         commentHtml.appendChild(commentDateAnswerContainer);
     }
     if (comment.subComments > 0 && !isReply) {
-        const buttonOpenAnswers = document.createElement('a');
-        buttonOpenAnswers.classList.add('button-answer');
-        buttonOpenAnswers.id = 'button-open-answer';
-        buttonOpenAnswers.textContent = 'Раскрыть ответы';
-        buttonOpenAnswers.setAttribute('data-post-id', post.id);
-        buttonOpenAnswers.setAttribute('data-comment-id', comment.id);
-        commentHtml.appendChild(buttonOpenAnswers);
-    }
+            const buttonOpenAnswers = document.createElement('a');
+            buttonOpenAnswers.classList.add('button-answer');
+            buttonOpenAnswers.id = 'button-open-answer';
+            buttonOpenAnswers.textContent = 'Раскрыть ответы';
+            buttonOpenAnswers.setAttribute('data-post-id', post.id);
+            buttonOpenAnswers.setAttribute('data-comment-id', comment.id);
+            commentHtml.appendChild(buttonOpenAnswers);
+        }
     return commentHtml;
 }
 
@@ -165,6 +165,7 @@ export async function sendComment(postId, content, parentId = null, answer = fal
             if (answerForm) {
                 answerForm.remove();
             }
+            
         }
 
         reloadAllComments(postId);
@@ -173,6 +174,10 @@ export async function sendComment(postId, content, parentId = null, answer = fal
 
 export async function editComment(id, content, postId) {
     const success = await requestEditComment(id, content);
+
+    if (success) {
+        reloadAllComments(postId);
+    }
 }
 
 export async function openReplies(commentId) {
@@ -267,7 +272,7 @@ export function showInputEditComment(id) {
     const buttonSendEdit = document.createElement('button');
     buttonSendEdit.classList.add('button');
     buttonSendEdit.setAttribute('data-comment-id', id);
-    buttonSendAnswer.setAttribute('data-post-id', post.id);
+    buttonSendEdit.setAttribute('data-post-id', post.id);
     buttonSendEdit.id = 'button-send-edit';
     buttonSendEdit.textContent = 'Редактировать';
 
@@ -281,35 +286,15 @@ export function showInputEditComment(id) {
     if (commentContent) {
         commentContent.parentNode.insertBefore(editHtml, commentContent);
     }
-
-    buttonSendEdit.addEventListener('click', async () => {
-        const newContent = inputEdit.value.trim();
-        if (newContent) {
-            const isUpdated = await requestEditComment(id, newContent);
-            if (isUpdated) {
-                if (commentContent) {
-                    commentContent.textContent = newContent;
-                    commentContent.style.display = 'block';
-                    isModified.style.display = 'inline';
-
-                    isModified.addEventListener('mouseenter', () => {
-                        const now = new Date();
-                        const formattedTime = now.toLocaleString();
-                        isModified.textContent = formattedTime; 
-                    });
-                
-                    isModified.addEventListener('mouseleave', () => {
-                        isModified.textContent = '(изменен)'; 
-                    });
-                    
-                }
-                editHtml.remove();
-            }
-        } 
-    });
 }
 
 export async function reloadAllComments(postId) {
+
+    const errorElement = document.getElementById('error');
+    if (errorElement) {
+        errorElement.style.display = 'none';
+    }
+    
     const commentsContainer = document.getElementById('container-comments');
 
     const post = await getInformationConcretePost(postId);
