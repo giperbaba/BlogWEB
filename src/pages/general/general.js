@@ -67,6 +67,7 @@ export function navigate(page, postId = null, anchor = null) {
             }
 
             else if (page === 'authorization') {
+                editHeaderButtons(page);
                 localStorage.removeItem('token');
             }
 
@@ -157,8 +158,8 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-save-edit':
             const formEdit = document.querySelector('.form-profile');
             if (formEdit && formEdit.checkValidity()) {
-                console.log('save')
-                edit();
+                event.preventDefault(); 
+                await edit();
             }
             else {
                 formEdit?.reportValidity();

@@ -1,10 +1,11 @@
 import { navigate } from '../general/general.js'
 import { handleError } from '../../utils/utils.js';
 
+
 export async function sendRequestEditProfile(data) {
-    console.log('response')
     const currentToken = localStorage.getItem('token');
     try {
+        console.log(data);
         const response = await fetch('https://blog.kreosoft.space/api/account/profile', {
             method: 'PUT',
             headers: {
@@ -17,13 +18,16 @@ export async function sendRequestEditProfile(data) {
         if (response.ok) {
             alert('Профиль отредактирован');
         }
-
-        else if (response.status === 400) {
-            const errorData = await response.json();
-            console.log(errorData);
-            const errorElement = document.getElementById("error");
-            errorElement.textContent = errorData.message;
+        else {
+            handleError(response);
+            if (response.status === 400) {
+                const errorData = await response.json();
+                console.log(errorData);
+                const errorElement = document.getElementById("error");
+                errorElement.textContent = errorData.message;
+            }
         }
+
     }
     catch (error) {
         alert(`Error: ${error.message || "Unknown error"}`);
@@ -66,9 +70,7 @@ export async function showProfile(profile) {
     if (phoneNumber) phoneNumber.value = profile.phoneNumber || '';
 }
 
-
 export async function edit() {
-    console.log('edit')
     const fullName = document.getElementById('fullName').value;
     const birthDate = document.getElementById('birthDate').value;
     const gender = document.getElementById('gender').value;
