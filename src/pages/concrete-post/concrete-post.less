@@ -1,6 +1,7 @@
 @import '../../general-less/general.less';
 
 @button-blue-color: #0b6ffd;
+@button-yellow-color: #F3A505;
 @border: darken(#ebeced, 4%);
 @heading-background: #f7f7f7;
 @text-grey-color: darken(#54595e, 10%);
@@ -93,7 +94,25 @@
                 #button-read-full:hover {
                     text-decoration: none;
                 }
+
+                .address {
+                    display: flex;
+                    flex-direction: row; 
+                    gap: 6px;
+                    align-items: center;
+
+                    #icon-address {
+                        width: 18px;
+                        height: 18px;
+                    }
+  
+                }
             }
+            
+            .icon {
+                    width: 16px;
+                    height: 16px;
+                }
 
             .footer-post {
                 grid-area: footer;
@@ -102,13 +121,7 @@
                 display: flex;
                 flex-direction: row;
                 padding: 12px;
-                align-items: center;
-
-
-                .icon {
-                    width: 15px;
-                    height: 15px;
-                }
+                align-items: center;                
 
                 .container-comment {
                     display: flex;
@@ -169,6 +182,7 @@
                 .icon {
                     width: 16px;
                     height: 16px;
+                    cursor: pointer; 
                 }
             }
 
@@ -224,12 +238,14 @@
                 font-size: 15px;
             }
 
-            .container-answer-comment {
+            .container-handle-comment {
                 display: flex;
                 flex-direction: row;
+                align-items: center;
                 gap: 6px;
+                width: 100%;
 
-                #input-answer {
+                .input-comment {
                     width: 90%;
                     padding: 4px;
                 }
@@ -242,9 +258,21 @@
                     border: none;
                     border-radius: 4px;
                     font-size: 14px;
-                    //margin-left: auto;
                 }
-                
+
+                #button-send-edit {
+                    height: 30px;
+                    width: 118px;
+                    background-color: @button-yellow-color;
+                    color: black;
+                    border: none;
+                    border-radius: 4px;
+                    font-size: 14px;
+                }
+                #error {
+                    color: red;
+                    margin-left: 4px;
+                }
             }
         }
     }
@@ -285,6 +313,11 @@
         #button-send-comment {
             margin-left: auto;
             background: @button-blue-color;
+        }
+
+        #error {
+            margin-left: 4px;
+            color: red;
         }
     }
 }

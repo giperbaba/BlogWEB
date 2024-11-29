@@ -15,12 +15,13 @@ import { updatePagination } from '../main/main.js'
 
 import { addLike } from '../main/post/post.js'
 import { deleteLike } from '../main/post/post.js'
-import { uploadConcretePostPage } from '../concrete-post/concrete-post.js'
+import { editComment, uploadConcretePostPage } from '../concrete-post/concrete-post.js'
 
 import { sendComment } from '../concrete-post/concrete-post.js'
 import { openReplies } from '../concrete-post/concrete-post.js'
 
 import { showInputAnswer } from '../concrete-post/concrete-post.js'
+import { showInputEditComment } from '../concrete-post/concrete-post.js'
 
 export function navigate(page, postId = null, anchor = null) {
     const pages = {
@@ -151,6 +152,7 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-save-edit':
             const formEdit = document.querySelector('.form-profile');
             if (formEdit && formEdit.checkValidity()) {
+                console.log('save')
                 edit();
             }
             else {
@@ -193,11 +195,11 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-read-full':
             postId = target.getAttribute('data-post-id');
 
-            fullPost = null; 
+            fullPost = null;
             const allPosts = currentPageData.posts;
             allPosts.forEach(post => {
                 if (post.id === postId) {
-                fullPost = post;
+                    fullPost = post;
                 }
             });
 
@@ -225,7 +227,7 @@ document.getElementById('main').addEventListener('click', async function (event)
                     : Math.max(currentLikes - 1, 0);
             }
             break;
-        
+
         case 'button-icon-comment':
             navigate(target.getAttribute('data-page'), target.getAttribute('data-post-id'), 'container-comments');
             break;
@@ -237,21 +239,31 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-send-comment':
             const inputElement = document.getElementById('input-create-comment');
             const commentContent = inputElement.value.trim();
-            if (await sendComment(target.getAttribute('data-post-id'), commentContent)) {  }
-            break;
-
-        case 'button-answer':
-            showInputAnswer(target.getAttribute('data-comment-id'));
+            if (await sendComment(target.getAttribute('data-post-id'), commentContent)) { }
             break;
 
         case 'button-open-answer':
             await openReplies(target.getAttribute('data-comment-id'));
             break;
 
+        case 'button-answer':
+            showInputAnswer(target.getAttribute('data-comment-id'));
+            break;
+
         case 'button-send-answer':
             const inputAnswer = document.getElementById('input-answer');
             const answerContent = inputAnswer.value.trim();
             await sendComment(target.getAttribute('data-post-id'), answerContent, target.getAttribute('parent-id'));
+            break;
+
+        case 'button-edit-comment':
+            showInputEditComment(target.getAttribute('data-comment-id'));
+            break;
+
+        case 'button-send-edit':
+            const inputEdit = document.getElementById('input-edit');
+            const editContent = inputEdit.value.trim();
+            await editComment(target.getAttribute('data-comment-id'), editContent, target.getAttribute('data-post-id'));            
             break;
 
         default:

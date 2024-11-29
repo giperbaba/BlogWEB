@@ -2,6 +2,8 @@ import { getTags } from '../../utils/tag.js';
 
 import { formatDateTime } from '../../utils/utils.js';
 import { getTruncateDescription } from '../../utils/utils.js'
+import { requestGetAddress } from '../address/address.js';
+
 
 export async function pushTags() {
     try {
@@ -92,7 +94,7 @@ export async function showPosts(currentPageData) {
     });
 }
 
-export async function getConcretePostHtml(post) {
+export async function getConcretePostHtml(post, concretePage = false) {
     const postDiv = document.createElement('div');
     postDiv.classList.add('post');
 
@@ -110,8 +112,14 @@ export async function getConcretePostHtml(post) {
     postDate.classList.add('post-data');
     postDate.textContent = formatDateTime(post.createTime);
 
+    const postCommunity = document.createElement('p');
+    postCommunity.classList.add('post-data');
+    const communityName = post.communityName ? post.communityName : '415';
+    postCommunity.textContent = ' в сообществе "' + communityName + '"';
+
     postAuthorDateContainer.appendChild(postTextAboutAuthor);
     postAuthorDateContainer.appendChild(postDate);
+    postAuthorDateContainer.appendChild(postCommunity);
 
     const postName = document.createElement('a');
     postName.setAttribute('href', '#');
@@ -171,6 +179,30 @@ export async function getConcretePostHtml(post) {
     mainPost.appendChild(postDesc);
     mainPost.appendChild(postTags);
     mainPost.appendChild(postReadTime);
+
+    if (post.addressId !== null && concretePage) {
+        const addressHtml = document.createElement('div');
+        addressHtml.classList.add('address');
+
+        const addressText = document.createElement('p');
+        addressText.id = 'text-address';
+
+        const addressIcon = document.createElement('img');
+        addressIcon.src = '/src/drawable/icon-address.png';
+        addressIcon.classList.add('icon');
+        addressIcon.id = 'icon-address';
+
+        addressHtml.appendChild(addressIcon);
+
+        const fullAddress = await requestGetAddress(post.addressId);
+            console.log(fullAddress);
+            fullAddress.forEach(address => {
+                addressText.textContent = addressText.textContent + address.text + ',  ';
+            });
+
+        addressHtml.appendChild(addressText);
+        mainPost.appendChild(addressHtml);
+    }
 
     const footerPost = document.createElement('div');
     footerPost.classList.add('footer-post');

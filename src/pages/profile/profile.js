@@ -2,6 +2,7 @@ import { navigate } from '../general/general.js'
 import { handleError } from '../../utils/utils.js';
 
 export async function sendRequestEditProfile(data) {
+    console.log('response')
     const currentToken = localStorage.getItem('token');
     try {
         const response = await fetch('https://blog.kreosoft.space/api/account/profile', {
@@ -67,6 +68,7 @@ export async function showProfile(profile) {
 
 
 export async function edit() {
+    console.log('edit')
     const fullName = document.getElementById('fullName').value;
     const birthDate = document.getElementById('birthDate').value;
     const gender = document.getElementById('gender').value;
