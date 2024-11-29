@@ -86,10 +86,10 @@ export async function requestEditComment(id, content) { //{ "content": "string" 
     }
 }
 
-export async function requestDeleteComment(commentId) {
+export async function requestDeleteComment(id) {
     const currentToken = localStorage.getItem('token');
     try {
-        const response = await fetch(`https://blog.kreosoft.space/api/comment/${commentId}`, {
+        const response = await fetch(`https://blog.kreosoft.space/api/comment/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${currentToken}`,

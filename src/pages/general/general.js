@@ -15,7 +15,7 @@ import { updatePagination } from '../main/main.js'
 
 import { addLike } from '../main/post/post.js'
 import { deleteLike } from '../main/post/post.js'
-import { editComment, uploadConcretePostPage } from '../concrete-post/concrete-post.js'
+import { deleteComment, editComment, uploadConcretePostPage } from '../concrete-post/concrete-post.js'
 
 import { sendComment } from '../concrete-post/concrete-post.js'
 import { openReplies } from '../concrete-post/concrete-post.js'
@@ -52,6 +52,8 @@ export function navigate(page, postId = null, anchor = null) {
 
             history.pushState({ page: page }, page, `#${page}`);
 
+        
+
             if (page === 'profile') {
                 const token = localStorage.getItem('token');
                 if (token) {
@@ -62,6 +64,10 @@ export function navigate(page, postId = null, anchor = null) {
                         })
                         .catch(error => console.error(error));
                 }
+            }
+
+            else if (page === 'authorization') {
+                localStorage.removeItem('token');
             }
 
             else if (page === 'authorization' || page === 'registration') {
@@ -83,7 +89,6 @@ export function navigate(page, postId = null, anchor = null) {
                     });
                 }
             }
-
         })
         .catch(error => {
             console.log(error);
@@ -264,6 +269,10 @@ document.getElementById('main').addEventListener('click', async function (event)
             const inputEdit = document.getElementById('input-edit');
             const editContent = inputEdit.value.trim();
             await editComment(target.getAttribute('data-comment-id'), editContent, target.getAttribute('data-post-id'));            
+            break;
+
+        case 'button-delete-comment':
+            deleteComment(target.getAttribute('data-comment-id'), target.getAttribute('data-post-id'));
             break;
 
         default:

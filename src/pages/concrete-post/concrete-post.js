@@ -8,6 +8,8 @@ import { requestGetAllReplies } from './comment/comment.js';
 
 import { getResponseProfile } from '../profile/profile.js';
 
+import { requestDeleteComment } from './comment/comment.js';
+
 import { navigate } from '../general/general.js';
 
 let post = null;
@@ -77,6 +79,7 @@ async function getCommentHtml(comment, isReply = false) {
                 deleteIcon.src = '/src/drawable/icon-delete.png';
                 deleteIcon.classList.add('icon');
                 deleteIcon.setAttribute('data-comment-id', comment.id);
+                deleteIcon.setAttribute('data-post-id', post.id);
                 deleteIcon.id = 'button-delete-comment';
 
                 authorEditDeleteCommentContainer.appendChild(textAboutAuthor);
@@ -132,16 +135,15 @@ async function getCommentHtml(comment, isReply = false) {
 
         commentHtml.appendChild(commentContentModifiedContainer);
         commentHtml.appendChild(commentDateAnswerContainer);
-
-        if (comment.subComments > 0 && !isReply) {
-            const buttonOpenAnswers = document.createElement('a');
-            buttonOpenAnswers.classList.add('button-answer');
-            buttonOpenAnswers.id = 'button-open-answer';
-            buttonOpenAnswers.textContent = 'Раскрыть ответы';
-            buttonOpenAnswers.setAttribute('data-post-id', post.id);
-            buttonOpenAnswers.setAttribute('data-comment-id', comment.id);
-            commentHtml.appendChild(buttonOpenAnswers);
-        }
+    }
+    if (comment.subComments > 0 && !isReply) {
+        const buttonOpenAnswers = document.createElement('a');
+        buttonOpenAnswers.classList.add('button-answer');
+        buttonOpenAnswers.id = 'button-open-answer';
+        buttonOpenAnswers.textContent = 'Раскрыть ответы';
+        buttonOpenAnswers.setAttribute('data-post-id', post.id);
+        buttonOpenAnswers.setAttribute('data-comment-id', comment.id);
+        commentHtml.appendChild(buttonOpenAnswers);
     }
     return commentHtml;
 }
@@ -265,6 +267,7 @@ export function showInputEditComment(id) {
     const buttonSendEdit = document.createElement('button');
     buttonSendEdit.classList.add('button');
     buttonSendEdit.setAttribute('data-comment-id', id);
+    buttonSendAnswer.setAttribute('data-post-id', post.id);
     buttonSendEdit.id = 'button-send-edit';
     buttonSendEdit.textContent = 'Редактировать';
 
@@ -326,4 +329,12 @@ export async function reloadAllComments(postId) {
     const amountComments = document.getElementsByClassName('amount-comments')[0];
     const currentComments = parseInt(amountComments.textContent) || 0;
     amountComments.textContent = currentComments + comments.length;
+}
+
+export async function deleteComment(id, postId) {
+    const success = await requestDeleteComment(id);
+
+    if (success) {
+        reloadAllComments(postId);
+    }
 }
