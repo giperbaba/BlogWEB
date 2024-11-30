@@ -12,6 +12,7 @@ header {
     height: 8%;
     border-bottom: 1px solid @border;
     box-shadow: 0px 0px 6px 6px @shadow;
+    min-height: 60px;
 
     .nav-bar {
         flex: 1 0 auto;
@@ -67,10 +68,16 @@ header {
 
         #dropdown-menu {
             display: none;
-
             justify-content: flex-end;
             margin-left: auto;
             position: relative;
+
+            #nav-mail {
+                display: flex;
+                //overflow-x: hidden;
+                //text-overflow: ellipsis;
+                cursor: pointer; 
+            }
 
             #dropdown-content {
                 display: none;
@@ -100,5 +107,22 @@ header {
         font-size: 20px;
         margin: 0;
         margin-left: 3%;
+    }
+}
+
+@media screen and (max-width:400px) {
+    #dropdown-menu {
+        display: none;
+        justify-content: flex-end;
+        margin-left: auto;
+        position: relative;
+        width: 95px;
+
+        #nav-mail {
+            display: block;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer; 
+        }
     }
 }

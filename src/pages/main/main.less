@@ -18,6 +18,7 @@
     grid-template-rows: auto 1fr auto;
 
     .grid-header {
+        max-width: 100%;
         grid-area: header;
         display: flex;
         flex-direction: column;
@@ -130,6 +131,7 @@
     }
 
     .container-posts {
+        max-width: 100%;
         grid-area: main;
         display: flex;
         flex-direction: column;
@@ -144,6 +146,7 @@
 
             border-radius: 4px;
             border: 1px solid @border;
+            box-sizing: border-box;
 
 
             .header-post {
@@ -199,7 +202,7 @@
     
                 .post-img {
                     align-self: center;
-                    width: 22rem;
+                    width: 19rem;
                     margin: 4px;
                 }
 
@@ -261,6 +264,7 @@
     }
 
     .container-pagination {
+        max-width: 100%;
         display: flex;
         grid-area: footer;
         margin-bottom: 50px;

@@ -126,6 +126,7 @@ export async function getConcretePostHtml(post, concretePage = false) {
     postName.classList.add('post-name');
     postName.id = 'button-concrete-post';
     postName.setAttribute('data-post-id', post.id);
+    postName.setAttribute('data-community-id', post.communityId);
     postName.setAttribute('data-page', 'concrete');
     postName.textContent = post.title;
 
@@ -200,6 +201,8 @@ export async function getConcretePostHtml(post, concretePage = false) {
                 addressText.textContent = addressText.textContent + address.text + ',  ';
             });
 
+        addressText.textContent = addressText.textContent.trim().slice(0, -2);
+
         addressHtml.appendChild(addressText);
         mainPost.appendChild(addressHtml);
     }
@@ -238,6 +241,7 @@ export async function getConcretePostHtml(post, concretePage = false) {
 
     likeIcon.classList.add('icon');
     likeIcon.setAttribute('data-post-id', post.id);
+    likeIcon.setAttribute('data-community-id', post.communityId);
     likeIcon.id = 'button-icon-heart';
 
     containerComment.appendChild(amountComments);

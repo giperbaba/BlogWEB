@@ -44,6 +44,7 @@ export async function requestAddComment(postId, data) {
 
                 if (errorData.title) {
                     errorElement.textContent = errorData.title;
+                    errorElement.style.display = 'inline';
                 }
             }
             handleError(response);

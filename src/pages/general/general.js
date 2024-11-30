@@ -23,6 +23,8 @@ import { openReplies } from '../concrete-post/concrete-post.js'
 import { showInputAnswer } from '../concrete-post/concrete-post.js'
 import { showInputEditComment } from '../concrete-post/concrete-post.js'
 
+import { getCommunity, getRoleInCommunity } from '../community/community.js'
+
 export function navigate(page, postId = null, anchor = null) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
@@ -52,7 +54,7 @@ export function navigate(page, postId = null, anchor = null) {
 
             history.pushState({ page: page }, page, `#${page}`);
 
-        
+
 
             if (page === 'profile') {
                 const token = localStorage.getItem('token');
@@ -118,6 +120,9 @@ document.querySelectorAll('.nav-text').forEach(item => {
 let currentPageData = null;
 let postId = null;
 let fullPost = null;
+let id = null;
+let isClosed = false;
+let roleInCommunity = null;
 
 document.getElementById('main').addEventListener('click', async function (event) {
     //event.preventDefault(); влияет на вход в аккаунт и на работоспособность checkbox
@@ -158,7 +163,7 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-save-edit':
             const formEdit = document.querySelector('.form-profile');
             if (formEdit && formEdit.checkValidity()) {
-                event.preventDefault(); 
+                event.preventDefault();
                 await edit();
             }
             else {
@@ -219,19 +224,20 @@ document.getElementById('main').addEventListener('click', async function (event)
             postId = target.getAttribute('data-post-id');
 
             const isLiked = target.getAttribute('src') === '/src/drawable/icon-heart-empty.png';
-            const action = isLiked ? addLike : deleteLike;
+                const action = isLiked ? addLike : deleteLike;
 
-            if (await action(postId)) {
-                target.src = isLiked
-                    ? '/src/drawable/icon-heart-full.png'
-                    : '/src/drawable/icon-heart-empty.png';
+                if (await action(postId)) {
+                    target.src = isLiked
+                        ? '/src/drawable/icon-heart-full.png'
+                        : '/src/drawable/icon-heart-empty.png';
 
-                const amountLikesElement = target.parentNode.querySelector('.amount-likes');
-                const currentLikes = parseInt(amountLikesElement.textContent) || 0;
-                amountLikesElement.textContent = isLiked
-                    ? currentLikes + 1
-                    : Math.max(currentLikes - 1, 0);
-            }
+                    const amountLikesElement = target.parentNode.querySelector('.amount-likes');
+                    const currentLikes = parseInt(amountLikesElement.textContent) || 0;
+                    amountLikesElement.textContent = isLiked
+                        ? currentLikes + 1
+                        : Math.max(currentLikes - 1, 0);
+                }
+
             break;
 
         case 'button-icon-comment':
@@ -239,6 +245,7 @@ document.getElementById('main').addEventListener('click', async function (event)
             break;
 
         case 'button-concrete-post':
+            postId = target.getAttribute('data-post-id');
             navigate(target.getAttribute('data-page'), target.getAttribute('data-post-id'));
             break;
 
@@ -269,7 +276,7 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-send-edit':
             const inputEdit = document.getElementById('input-edit');
             const editContent = inputEdit.value.trim();
-            await editComment(target.getAttribute('data-comment-id'), editContent, target.getAttribute('data-post-id'));            
+            await editComment(target.getAttribute('data-comment-id'), editContent, target.getAttribute('data-post-id'));
             break;
 
         case 'button-delete-comment':
