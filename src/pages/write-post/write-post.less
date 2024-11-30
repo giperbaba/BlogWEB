@@ -1,0 +1,92 @@
+@import '../../general-less/general.less';
+
+@button-blue-color: #0b6ffd;
+@border: #ebeced;
+
+.form-write-new-post {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid @border;
+    border-radius: 4px;
+    width: 90%;
+    gap: 10px;
+    padding: 16px;
+
+    .input-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .input {
+        border: 1px solid @border;
+        border-radius: 4px;
+        height: 28px;
+        padding: 4px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+
+        #input-read-time {
+            width: 35%;
+        }
+
+
+        #input-name {
+            width: 85%;
+        }
+
+        #input-group {
+            width: 50%;
+        }
+
+        #input-tags {
+            width: 50%;
+
+            #select-search-tag {
+                height: 60px;
+            }
+        }
+    }
+
+    #post-text {
+        width: calc(100% - 8px);
+        height: 100px;
+        padding: 5px;
+        padding-top: 5px;
+        align-self: center;
+        resize: both;
+        overflow: auto;
+    }
+
+    #container-address {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .input {
+            border: 1px solid @border;
+            border-radius: 4px;
+            height: 28px;
+        }
+
+        
+    }
+    #error {
+        color: red;
+        white-space: pre-wrap;
+    }
+    .button {
+        margin-left: auto;
+        background-color: @button-blue-color;
+        height: 36px;
+        width: 100px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 4px;
+    }
+}

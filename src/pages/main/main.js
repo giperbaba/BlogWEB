@@ -150,8 +150,13 @@ export async function getConcretePostHtml(post, concretePage = false) {
     const description = post.description;
     const maxLength = 500;
 
+    const textDesc = document.createElement('p');
+    textDesc.id = 'text-desc';
+
     const truncatedDescription = getTruncateDescription(description, maxLength);
-    postDesc.textContent = truncatedDescription;
+    textDesc.textContent = truncatedDescription;
+
+    postDesc.appendChild(textDesc);
 
     if (truncatedDescription !== description) {
         const buttonReadFull = document.createElement('a');

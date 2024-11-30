@@ -25,13 +25,18 @@ import { showInputEditComment } from '../concrete-post/concrete-post.js'
 
 import { getCommunity, getRoleInCommunity } from '../community/community.js'
 
+import { pushGroups } from '../write-post/write-post.js'
+
+import { createPost } from '../write-post/write-post.js'
+
 export function navigate(page, postId = null, anchor = null) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
         registration: '/src/pages/registration/registration.html',
         profile: '/src/pages/profile/profile.html',
         main: '/src/pages/main/main.html',
-        concrete: '/src/pages/concrete-post/concrete-post.html'
+        concrete: '/src/pages/concrete-post/concrete-post.html',
+        writePost: '/src/pages/write-post/write-post.html'
     };
 
     const url = pages[page];
@@ -91,6 +96,11 @@ export function navigate(page, postId = null, anchor = null) {
                         }
                     });
                 }
+            }
+
+            else if (page === 'writePost') {
+                pushGroups();
+                pushTags();
             }
         })
         .catch(error => {
@@ -283,6 +293,34 @@ document.getElementById('main').addEventListener('click', async function (event)
             deleteComment(target.getAttribute('data-comment-id'), target.getAttribute('data-post-id'));
             break;
 
+        case 'button-write-post':
+            const token = localStorage.getItem('token');
+            if (token) {
+                if (await getResponseProfile(token) !== null) {
+                    navigate(page);
+                    break;
+                }
+            }
+            else {
+                alert('Please, authorize to write post');
+            }
+            break;
+
+        case 'button-write-post-header':
+            navigate(page);
+            break;
+
+        case 'button-create-post':
+            const formCreatePost = document.querySelector('.form-write-new-post');
+            if (formCreatePost && formCreatePost.checkValidity()) {
+                event.preventDefault();
+                createPost();         
+            }
+            else {
+                formCreatePost?.reportValidity();
+            }
+            break;
+
         default:
             break;
     }
@@ -308,14 +346,22 @@ function handlePhoneInput(e) {
 
 function editHeaderProfilePage(profile) {
     const buttonEnter = document.getElementById("nav-enter");
-    const buttonWritePost = document.getElementById("button-write-post");
+    const buttonWritePost = document.getElementById("button-write-post-header");
     const menuDropdown = document.getElementById("dropdown-menu");
     const menuUserMailText = document.getElementById("nav-mail");
+
+    const buttonAuthors = document.getElementById("button-authors");
+    const buttonGroups = document.getElementById("button-groups");
 
     buttonEnter.style.display = "none";
     buttonWritePost.style.display = "inline";
     menuDropdown.style.display = "block";
     menuUserMailText.textContent = `${profile.email} ▼`;
+
+    if (buttonAuthors) {
+        buttonAuthors.style.display = "none";
+        buttonGroups.style.display = "none";
+    }
 
     menuDropdown.removeEventListener('click', openDropdownMenu);
     menuDropdown.addEventListener('click', openDropdownMenu);
@@ -327,7 +373,7 @@ function editHeaderProfilePage(profile) {
 function editHeaderAuthPage() {
     const buttonEnter = document.getElementById("nav-enter");
     const menuDropdown = document.getElementById("dropdown-menu");
-    const buttonWritePost = document.getElementById("button-write-post");
+    const buttonWritePost = document.getElementById("button-write-post-header");
     const buttonAuthors = document.getElementById("button-authors");
     const buttonGroups = document.getElementById("button-groups");
 
@@ -339,7 +385,7 @@ function editHeaderAuthPage() {
 }
 
 function editHeaderMainPage() {
-    const buttonWritePost = document.getElementById("button-write-post");
+    const buttonWritePost = document.getElementById("button-write-post-header");
     const buttonAuthors = document.getElementById("button-authors");
     const buttonGroups = document.getElementById("button-groups");
 
