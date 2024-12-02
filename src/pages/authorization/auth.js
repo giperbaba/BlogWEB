@@ -1,4 +1,5 @@
 import { navigate } from '../general/general.js'
+import { handleError } from '../../utils/utils.js';
 
 async function sendRequestLogin(page, email, password) {
     try {
@@ -22,6 +23,10 @@ async function sendRequestLogin(page, email, password) {
             const errorData = await response.json();
             const errorElement = document.getElementById("error");
             errorElement.textContent = errorData.message;
+        }
+
+        else {
+            handleError(response);
         }
     }
     catch (error) {

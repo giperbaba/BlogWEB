@@ -1,7 +1,7 @@
 import { handleError } from "../../utils/utils.js";
 
 export async function getCommunityList() {
-    const response = await fetch (`https://blog.kreosoft.space/api/community`, {
+    const response = await fetch(`https://blog.kreosoft.space/api/community`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

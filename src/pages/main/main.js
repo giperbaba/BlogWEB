@@ -206,7 +206,10 @@ export async function getConcretePostHtml(post, concretePage = false) {
                 addressText.textContent = addressText.textContent + address.text + ',  ';
             });
 
-        addressText.textContent = addressText.textContent.trim().slice(0, -2);
+        console.log(addressText.textContent);
+        console.log(addressText.textContent.trim())
+        addressText.textContent = addressText.textContent.trim().slice(0, -1);
+        
 
         addressHtml.appendChild(addressText);
         mainPost.appendChild(addressHtml);

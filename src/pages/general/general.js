@@ -29,6 +29,8 @@ import { pushGroups } from '../write-post/write-post.js'
 
 import { createPost } from '../write-post/write-post.js'
 
+import { createSearchAddressFields } from '../write-post/write-post.js'
+
 export function navigate(page, postId = null, anchor = null) {
     const pages = {
         authorization: '/src/pages/authorization/authorization.html',
@@ -101,6 +103,7 @@ export function navigate(page, postId = null, anchor = null) {
             else if (page === 'writePost') {
                 pushGroups();
                 pushTags();
+                createSearchAddressFields();
             }
         })
         .catch(error => {
