@@ -2,6 +2,7 @@
   "dependencies": {
     "gulp-less": "^5.0.0",
     "http-errors": "^2.0.0",
+    "navigo": "^8.11.1",
     "route-parser": "^0.0.5"
   },
   "devDependencies": {

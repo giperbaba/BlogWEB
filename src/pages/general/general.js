@@ -1,35 +1,11 @@
 import { login } from '../authorization/auth.js'
 import { register } from '../registration/register.js'
-
-import { edit } from '../profile/profile.js'
-import { logout } from '../profile/profile.js'
-import { getResponseProfile } from '../profile/profile.js'
-import { showProfile } from '../profile/profile.js'
-
-import { pushTags } from '../main/main.js'
-import { generatePostOptions } from '../main/main.js'
-
-import { getPosts } from '../main/post/post.js'
-import { showPosts } from '../main/main.js'
-import { updatePagination } from '../main/main.js'
-
-import { addLike } from '../main/post/post.js'
-import { deleteLike } from '../main/post/post.js'
+import { edit, logout, getResponseProfile, showProfile} from '../profile/profile.js'
+import { pushTags, generatePostOptions, showPosts, updatePagination } from '../main/main.js'
 import { deleteComment, editComment, uploadConcretePostPage } from '../concrete-post/concrete-post.js'
+import { sendComment, openReplies, showInputAnswer, showInputEditComment } from '../concrete-post/concrete-post.js'
+import { pushGroups, createPost, createSearchAddressFields } from '../write-post/write-post.js'
 
-import { sendComment } from '../concrete-post/concrete-post.js'
-import { openReplies } from '../concrete-post/concrete-post.js'
-
-import { showInputAnswer } from '../concrete-post/concrete-post.js'
-import { showInputEditComment } from '../concrete-post/concrete-post.js'
-
-import { getCommunity, getRoleInCommunity } from '../community/community.js'
-
-import { pushGroups } from '../write-post/write-post.js'
-
-import { createPost } from '../write-post/write-post.js'
-
-import { createSearchAddressFields } from '../write-post/write-post.js'
 
 export function navigate(page, postId = null, anchor = null) {
     const pages = {
@@ -43,7 +19,7 @@ export function navigate(page, postId = null, anchor = null) {
 
     const url = pages[page];
 
-    const protectedPages = ['profile'];
+    const protectedPages = ['profile', 'writePost'];
     const token = localStorage.getItem('token');
 
     if (protectedPages.includes(page) && !token) {
@@ -59,9 +35,7 @@ export function navigate(page, postId = null, anchor = null) {
         .then(async html => {
             document.getElementById('main').innerHTML = html;
 
-            history.pushState({ page: page }, page, `#${page}`);
-
-
+            history.pushState({ page: page }, page, `/${page}`);
 
             if (page === 'profile') {
                 const token = localStorage.getItem('token');
@@ -117,11 +91,6 @@ window.addEventListener('popstate', (event) => {
     }
 });
 
-if (window.location.hash) {
-    const page = window.location.hash.slice(1);
-    navigate(page);
-}
-
 document.querySelectorAll('.nav-text').forEach(item => {
     item.addEventListener('click', function (event) {
         event.preventDefault();
@@ -133,9 +102,6 @@ document.querySelectorAll('.nav-text').forEach(item => {
 let currentPageData = null;
 let postId = null;
 let fullPost = null;
-let id = null;
-let isClosed = false;
-let roleInCommunity = null;
 
 document.getElementById('main').addEventListener('click', async function (event) {
     //event.preventDefault(); влияет на вход в аккаунт и на работоспособность checkbox
