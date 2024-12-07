@@ -1,4 +1,4 @@
-async function getFiltersForGetPosts(currentPage) {
+export async function getFiltersForGetPosts(currentPage) {
 
     const formData = new FormData(document.querySelector('#form-filters'));
     if (!formData) {
@@ -51,7 +51,16 @@ async function getFiltersForGetPosts(currentPage) {
 
 export async function getPosts(page = 1) {
     const currentToken = localStorage.getItem('token') || null;
-    const searchParams = await getFiltersForGetPosts(page);
+    let searchParams = await getFiltersForGetPosts(page);
+
+    updateUrlParams(searchParams)
+
+    
+
+    searchParams = new URLSearchParams(window.location.search);
+
+    const currentPage = 'main';
+    history.pushState({ currentPage }, '', window.location.href);
 
     if (!searchParams) { return; }
 
@@ -134,7 +143,6 @@ export async function addLike(postId) {
             alert('Please, authorize');
         }
 
-
         return false;
     }
     catch (error) {
@@ -170,4 +178,9 @@ export async function deleteLike(postId) {
     catch (error) {
         alert(`Error: ${error.message || "Unknown error"}`);
     }
+}
+
+function updateUrlParams(params) {
+    const url = new URL(window.location.href) + params;
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
 }

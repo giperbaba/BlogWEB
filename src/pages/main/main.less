@@ -9,22 +9,15 @@
 #page-post {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin-top: 30px;
     height: 100%;
-    max-width: 90%;
-    grid-template-areas:
-        "header"
-        "main"
-        "footer";
-    grid-template-rows: auto 1fr auto;
+    max-width: 75%;
 
     .grid-header {
         max-width: 100%;
-        grid-area: header;
         display: flex;
         flex-direction: column;
         margin-bottom: 5px;
-        height: 50%;
 
         .container-filters {
             border-radius: 4px;
@@ -337,7 +330,7 @@
 
 @media screen and (max-width: 720px) {
     #page-post {
-        width: 100%;
+        max-width: 100%;
 
         .grid-header {
             height: 100%;

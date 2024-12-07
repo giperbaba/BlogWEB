@@ -51,6 +51,14 @@ gulp.task('less-write-post', function() {
         .pipe(gulp.dest('./src/pages/write-post'));
 })
 
+
+gulp.task('less-communities', function() {
+    return gulp.src('./src/pages/communities/communities.less')
+        .pipe(less())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./src/pages/communities'));
+})
+
 gulp.task('watch', function() {
     gulp.watch('./src/pages/general/style.less', gulp.series('less-general'));
     gulp.watch('./src/pages/authorization/auth.less', gulp.series('less-authorization'));
@@ -59,7 +67,8 @@ gulp.task('watch', function() {
     gulp.watch('./src/pages/main/main.less', gulp.series('less-main'));
     gulp.watch('./src/pages/concrete-post/concrete-post.less', gulp.series('less-concrete-post'));
     gulp.watch('./src/pages/write-post/write-post.less', gulp.series('less-write-post'));
+    gulp.watch('./src/pages/communities/communities.less', gulp.series('less-communities'));
 })
 
-gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-main', 'less-profile', 'less-general', 'less-concrete-post', 'less-write-post'));
+gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-main', 'less-profile', 'less-general', 'less-concrete-post', 'less-write-post', 'less-communities'));
 gulp.task('default', gulp.series('less', 'watch'));

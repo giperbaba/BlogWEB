@@ -1,4 +1,4 @@
-import { getCommunityList } from "../community/community.js";
+import { getCommunityList } from "../communities/community/community.js";
 import { requestSearchAddress } from "../address/address.js";
 
 import { handleError } from "../../utils/utils.js";

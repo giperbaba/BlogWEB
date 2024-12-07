@@ -23,104 +23,115 @@ import { openReplies } from '../concrete-post/concrete-post.js'
 import { showInputAnswer } from '../concrete-post/concrete-post.js'
 import { showInputEditComment } from '../concrete-post/concrete-post.js'
 
-import { getCommunity, getRoleInCommunity } from '../community/community.js'
-
 import { pushGroups } from '../write-post/write-post.js'
 
 import { createPost } from '../write-post/write-post.js'
 
 import { createSearchAddressFields } from '../write-post/write-post.js'
+import { showCommunities } from '../communities/communities.js'
 
-export function navigate(page, postId = null, anchor = null) {
+
+export function navigate(page, postId = null, anchor = null, options = {}) {
     const pages = {
-        authorization: '/src/pages/authorization/authorization.html',
+        login: '/src/pages/authorization/authorization.html',
         registration: '/src/pages/registration/registration.html',
         profile: '/src/pages/profile/profile.html',
         main: '/src/pages/main/main.html',
+        writePost: '/src/pages/write-post/write-post.html',
         concrete: '/src/pages/concrete-post/concrete-post.html',
-        writePost: '/src/pages/write-post/write-post.html'
+        communities: '/src/pages/communities/communities.html'
     };
 
     const url = pages[page];
 
-    const protectedPages = ['profile'];
+    if (!url) {
+        console.error('Page not found');
+        return;
+    }
+
+    const protectedPages = ['profile', 'writePost'];
     const token = localStorage.getItem('token');
 
     if (protectedPages.includes(page) && !token) {
         alert('Время сеанса истекло');
-        return navigate('authorization');
+        return navigate('login');
     }
+
+    const newPath = buildPathForPage(page, postId, anchor, options);
+    history.pushState({ page }, '', newPath);
 
     fetch(url)
         .then(response => {
-            if (!response.ok) throw new Error("Page not found");
+            if (!response.ok) throw new Error('Page not found');
             return response.text();
         })
         .then(async html => {
             document.getElementById('main').innerHTML = html;
 
-            history.pushState({ page: page }, page, `#${page}`);
-
-
-
-            if (page === 'profile') {
-                const token = localStorage.getItem('token');
-                if (token) {
-                    getResponseProfile(token)
-                        .then(profile => {
-                            showProfile(profile);
-                            editHeaderButtons(page, profile);
-                        })
-                        .catch(error => console.error(error));
-                }
-            }
-
-            else if (page === 'authorization') {
-                editHeaderButtons(page);
+            if (page === 'login') {
                 localStorage.removeItem('token');
-            }
-
-            else if (page === 'authorization' || page === 'registration') {
                 editHeaderButtons(page);
             }
 
+            else if (page === 'profile') {
+                getResponseProfile(token)
+                    .then(profile => {
+                        showProfile(profile);
+                        editHeaderButtons(page, profile);
+                    })
+                    .catch(console.error);
+            } 
+            else if (page === 'login' || page === 'registration') {
+                editHeaderButtons(page);
+            } 
             else if (page === 'main') {
                 editHeaderButtons(page);
                 generatePostOptions();
                 pushTags();
-            }
-
-            else if (page === 'concrete') {
-                if (postId) {
-                    uploadConcretePostPage(postId).then(() => {
-                        if (anchor) {
-                            document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                    });
-                }
-            }
-
+            } 
             else if (page === 'writePost') {
                 pushGroups();
                 pushTags();
                 createSearchAddressFields();
+            } 
+            else if (page === 'concrete') {
+                if (postId) {
+                    await uploadConcretePostPage(postId);
+                    if (anchor) scrollToAnchor(anchor);
+                }
+            }
+            else if (page === 'communities') {
+                await showCommunities();
             }
         })
-        .catch(error => {
-            console.log(error);
-        });
+        .catch(console.error);
 }
 
-window.addEventListener('popstate', (event) => {
+function buildPathForPage(page, postId = null, anchor = null, options = {}) {
+    switch (page) {
+        case 'login':
+        case 'registration':
+        case 'profile':
+        case 'communities':
+            return `/${page}`;
+        case 'writePost':
+            return 'create/post'
+        case 'concrete':
+            return `/post/${postId}${anchor ? `#${anchor}` : ''}`;
+        case 'main':
+        default: {
+            const params = new URLSearchParams(options).toString();
+            return `/${params ? `?${params}` : ''}`;
+        }
+    }
+}
+
+/*window.addEventListener('popstate', (event) => {
     if (event.state) {
         navigate(event.state.page);
     }
-});
+});*/
 
-if (window.location.hash) {
-    const page = window.location.hash.slice(1);
-    navigate(page);
-}
 
 document.querySelectorAll('.nav-text').forEach(item => {
     item.addEventListener('click', function (event) {
@@ -133,9 +144,6 @@ document.querySelectorAll('.nav-text').forEach(item => {
 let currentPageData = null;
 let postId = null;
 let fullPost = null;
-let id = null;
-let isClosed = false;
-let roleInCommunity = null;
 
 document.getElementById('main').addEventListener('click', async function (event) {
     //event.preventDefault(); влияет на вход в аккаунт и на работоспособность checkbox
@@ -398,7 +406,7 @@ function editHeaderMainPage() {
 }
 
 function editHeaderButtons(page, profile = null) {
-    if (page === 'authorization' || page === 'registration') {
+    if (page === 'login' || page === 'registration') {
         editHeaderAuthPage();
     }
     else if (page === 'profile') {
@@ -423,7 +431,7 @@ function handleProfile(event) {
 function handleLogout(event) {
     event.preventDefault();
     logout();
-    navigate('authorization');
+    navigate('login');
 }
 
 function setupProfileHandler() {
@@ -440,4 +448,5 @@ function setupLogoutHandler() {
     buttonDropdownLogout.addEventListener('click', handleLogout);
 }
 
+navigate('login');
 

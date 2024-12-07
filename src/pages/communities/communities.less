@@ -1,0 +1,35 @@
+@import '../../general-less/general.less';
+
+@border: #ebeced;
+@shadow: #f7f7f7;
+@button-blue-color: #0b6ffd;
+@red-button: #dc3545;
+
+.communities {
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+    margin: 20px;
+    width: 75%;
+    max-width: 100%;
+
+    .item-community {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: @shadow;
+        border: 1px solid @border;
+        border-radius: 4px;
+        padding: 12px;
+
+        .button {
+            background-color: @button-blue-color;
+            border: none;
+            border-radius: 4px;
+            color: @shadow;
+            padding: 9px;
+            margin: 2px;
+        }
+    }
+}
