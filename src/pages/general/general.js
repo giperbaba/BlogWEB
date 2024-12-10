@@ -31,6 +31,7 @@ import { createSearchAddressFields } from '../write-post/write-post.js'
 import { showCommunities } from '../communities/communities.js'
 
 
+
 export function navigate(page, postId = null, anchor = null, options = {}) {
     const pages = {
         login: '/src/pages/authorization/authorization.html',
@@ -97,7 +98,7 @@ export function navigate(page, postId = null, anchor = null, options = {}) {
             else if (page === 'concrete') {
                 if (postId) {
                     await uploadConcretePostPage(postId);
-                    if (anchor) scrollToAnchor(anchor);
+                    //if (anchor) scrollToAnchor(anchor);
                 }
             }
             else if (page === 'communities') {

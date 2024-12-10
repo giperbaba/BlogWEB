@@ -149,8 +149,6 @@ async function getCommentHtml(comment, isReply = false) {
 }
 
 export async function sendComment(postId, content, parentId = null, answer = false) {
-    const currentToken = localStorage.getItem('token');
-
     const commentData = { content, parentId };
     const success = await requestAddComment(postId, commentData);
 
@@ -289,6 +287,7 @@ export function showInputEditComment(id) {
 }
 
 export async function reloadAllComments(postId) {
+    console.log('мяу')
 
     const errorElement = document.getElementById('error');
     if (errorElement) {

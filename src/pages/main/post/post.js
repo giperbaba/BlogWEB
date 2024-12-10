@@ -55,8 +55,6 @@ export async function getPosts(page = 1) {
 
     updateUrlParams(searchParams)
 
-    
-
     searchParams = new URLSearchParams(window.location.search);
 
     const currentPage = 'main';
@@ -104,7 +102,6 @@ export async function getInformationConcretePost(id) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             return data;
         }
         else if (response.status === 400) {
