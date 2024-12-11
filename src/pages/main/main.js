@@ -27,7 +27,7 @@ export async function pushTags() {
 
 export function generatePostOptions() {
     const postsCountSelect = document.getElementById('posts-count');
-    for (let i = 1; i <= 1000; i++) {
+    for (let i = 1; i <= 200; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = i;

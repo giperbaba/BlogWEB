@@ -30,7 +30,7 @@ import { createPost } from '../write-post/write-post.js'
 import { createSearchAddressFields } from '../write-post/write-post.js'
 import { showCommunities } from '../communities/communities.js'
 
-
+import { showAuthors } from '../authors/authors.js'
 
 export function navigate(page, postId = null, anchor = null, options = {}) {
     const pages = {
@@ -40,7 +40,8 @@ export function navigate(page, postId = null, anchor = null, options = {}) {
         main: '/src/pages/main/main.html',
         writePost: '/src/pages/write-post/write-post.html',
         concrete: '/src/pages/concrete-post/concrete-post.html',
-        communities: '/src/pages/communities/communities.html'
+        communities: '/src/pages/communities/communities.html',
+        authors: 'src/pages/authors/authors.html'
     };
 
     const url = pages[page];
@@ -54,7 +55,7 @@ export function navigate(page, postId = null, anchor = null, options = {}) {
     const token = localStorage.getItem('token');
 
     if (protectedPages.includes(page) && !token) {
-        alert('Время сеанса истекло');
+        alert('Session timed out');
         return navigate('login');
     }
 
@@ -104,6 +105,10 @@ export function navigate(page, postId = null, anchor = null, options = {}) {
             else if (page === 'communities') {
                 await showCommunities();
             }
+
+            else if (page = 'authors') {
+                await showAuthors();
+            }
         })
         .catch(console.error);
 }
@@ -114,11 +119,12 @@ function buildPathForPage(page, postId = null, anchor = null, options = {}) {
         case 'registration':
         case 'profile':
         case 'communities':
+        case 'authors':
             return `/${page}`;
         case 'writePost':
             return 'create/post'
         case 'concrete':
-            return `/post/${postId}${anchor ? `#${anchor}` : ''}`;
+            return `/post/${postId}}`;
         case 'main':
         default: {
             const params = new URLSearchParams(options).toString();
@@ -127,11 +133,11 @@ function buildPathForPage(page, postId = null, anchor = null, options = {}) {
     }
 }
 
-/*window.addEventListener('popstate', (event) => {
+window.addEventListener('popstate', (event) => {
     if (event.state) {
         navigate(event.state.page);
     }
-});*/
+});
 
 
 document.querySelectorAll('.nav-text').forEach(item => {

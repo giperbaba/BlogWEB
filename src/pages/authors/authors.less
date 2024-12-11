@@ -1,0 +1,145 @@
+@import '../../general-less/general.less';
+
+@border: #ebeced;
+@button-blue-color: #0b6ffd;
+@text-grey-color: darken(#6f7782, 15%);
+
+#container-authors {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
+    padding-bottom: 8px;
+
+    .author {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        border-bottom: 1px solid @border;
+        margin: 4px;
+        padding: 10px;
+
+        .author-crown {
+            display: flex;
+            flex-direction: row;
+            width: 68px;
+            gap: 0;
+
+            #icon-women {
+                width: 45px;
+                height: 45px;
+                margin: 4px;
+                border: 1px solid @border;
+                border-radius: 50%;
+                position: relative;
+                margin: 0px;
+            }
+    
+            #icon-man {
+                width: 45px;
+                height: 45px;
+                margin: 4px;
+                border: 1px solid @border;
+                border-radius: 50%;
+                position: relative;
+            }
+
+            #icon-crown {
+                position: relative;
+                width: 31px;
+                height: 31px;
+                bottom: 7px;
+                right: 14px;
+                transform: rotate(18deg);
+            }
+        }
+
+        .main-info-author {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 70%;
+
+            .name-createtime {
+                display: flex;
+                flex-direction: row;
+                align-items: end;
+                gap: 6px;
+                font-weight: 500;
+
+                .text-name {
+                    font-size: 19px;
+                    font-weight: 500;
+                }
+
+                .text-cursive {
+                    font-style: italic;
+                    color: @text-grey-color;
+                    font-size: 17px;
+                }
+            }
+
+            .birthday {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 4px;
+
+                .label-birth {
+                    color: @text-grey-color;
+                    font-weight: 600;
+                }
+
+                .text-birthday {}
+            }
+        }
+
+        .container-count-posts-likes {
+            display: flex;
+            flex-direction: row;
+
+            .count {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                width: 100px;
+                height: 25px;
+                border-radius: 4px;
+                margin: 4px;
+                padding: 6px;
+                background-color: @button-blue-color;
+
+                .text-count {
+                    color: white;
+                    font-weight: 600;
+                }
+            }
+        }
+
+
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .author {
+        width: 400px;
+        gap: 0px;
+
+        .container-count-posts-likes {
+            display: flex;
+            flex-direction: column !important;
+
+            .count {
+                width: 78px !important;
+                height: 35px !important;
+            } 
+        }
+
+        .text-name {
+            font-size: 17px !important;
+            font-weight: 500;
+        }
+    }
+}

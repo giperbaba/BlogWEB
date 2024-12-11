@@ -59,6 +59,13 @@ gulp.task('less-communities', function() {
         .pipe(gulp.dest('./src/pages/communities'));
 })
 
+gulp.task('less-authors', function() {
+    return gulp.src('./src/pages/authors/authors.less')
+        .pipe(less())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./src/pages/authors'));
+})
+
 gulp.task('watch', function() {
     gulp.watch('./src/pages/general/style.less', gulp.series('less-general'));
     gulp.watch('./src/pages/authorization/auth.less', gulp.series('less-authorization'));
@@ -68,7 +75,8 @@ gulp.task('watch', function() {
     gulp.watch('./src/pages/concrete-post/concrete-post.less', gulp.series('less-concrete-post'));
     gulp.watch('./src/pages/write-post/write-post.less', gulp.series('less-write-post'));
     gulp.watch('./src/pages/communities/communities.less', gulp.series('less-communities'));
+    gulp.watch('./src/pages/authors/authors.less', gulp.series('less-authors'));
 })
 
-gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-main', 'less-profile', 'less-general', 'less-concrete-post', 'less-write-post', 'less-communities'));
+gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-main', 'less-profile', 'less-general', 'less-concrete-post', 'less-write-post', 'less-communities', 'less-authors'));
 gulp.task('default', gulp.series('less', 'watch'));
