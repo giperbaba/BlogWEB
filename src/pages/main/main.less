@@ -51,6 +51,8 @@
                     .form-input {
                         height: 30px;
                         text-indent: 5px;
+                        border: 1px solid darken(@border, 5%);
+                        border-radius: 4px;
                     }
                 }
 
@@ -67,6 +69,8 @@
 
                     #select-search-tag {
                         text-indent: 5px;
+                        border: 1px solid darken(@border, 5%);
+                        border-radius: 4px;
                     }
                 }
 
@@ -98,6 +102,11 @@
                     align-items: center;
                     margin-top: 6px;
                     gap: 6px;
+                }
+                
+                #are-only-ny-communities {
+                    border: 1px solid darken(@border, 5%);
+                    border-radius: 4px;
                 }
             }
         }
@@ -301,6 +310,7 @@
             .form-input {
                 height: 30px;
                 text-indent: 5px;
+
             }
         }
 
@@ -317,10 +327,13 @@
             gap: 4px;
             margin-left: auto;
             align-self:flex-end;
+            
         }
 
         #posts-count {
             height: 30px;
+            border: 1px solid darken(@border, 5%);
+            border-radius: 4px;
         }
     }
 }

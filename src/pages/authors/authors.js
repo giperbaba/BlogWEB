@@ -1,5 +1,9 @@
 import { requestGetAuthors } from "./author/author.js";
 import { formatDateTime } from "../../utils/utils.js";
+import { navigate } from "../general/general.js";
+import { getPosts } from "../main/post/post.js";
+import { updatePagination } from "../main/main.js";
+import { showPosts } from "../main/main.js";
 
 export async function showAuthors() {
     let authors = await requestGetAuthors();
@@ -9,17 +13,15 @@ export async function showAuthors() {
 
     sortedAuthors.sort((a, b) => {
         if (b.posts !== a.posts) {
-            return b.posts - a.posts; 
+            return b.posts - a.posts;
         }
-        return b.likes - a.likes; 
+        return b.likes - a.likes;
     });
 
     const topAuthors = sortedAuthors.slice(0, 3);
 
     const authorsContainer = document.getElementById('container-authors');
-    console.log(authorsContainer);
     authors.forEach(author => {
-        console.log((topAuthors.includes(author)));
         (topAuthors.includes(author)) ? authorsContainer.appendChild(getAuthorHtml(author, topAuthors)) : authorsContainer.appendChild(getAuthorHtml(author));
     });
 }
@@ -27,6 +29,34 @@ export async function showAuthors() {
 function getAuthorHtml(author, topAuthors = []) {
     const divAuthor = document.createElement('div');
     divAuthor.classList.add('author');
+
+    divAuthor.addEventListener('click', async () => {
+        await navigate('main');
+
+        const waitForForm = () =>
+            new Promise((resolve) => {
+                const observer = new MutationObserver((mutationsList, observer) => {
+                    const form = document.querySelector('#form-filters');
+                    if (form) {
+                        observer.disconnect();
+                        resolve(form);
+                    }
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+            });
+
+        const form = document.querySelector('#form-filters') || (await waitForForm());
+
+        const input = form.querySelector('[name="input-search-by-name"]');
+        if (input) {
+            input.value = author.fullName;
+        }
+        const currentPageData = await getPosts(1);
+        updatePagination(currentPageData);
+        await showPosts(currentPageData);
+
+    });
+
 
     const containerAuthorCrown = document.createElement('div');
     containerAuthorCrown.classList.add('author-crown');
@@ -54,7 +84,7 @@ function getAuthorHtml(author, topAuthors = []) {
             crown.src = '/src/drawable/icon-crown-grey.png';
         }
         containerAuthorCrown.appendChild(crown);
-        
+
     }
     divAuthor.appendChild(containerAuthorCrown);
 

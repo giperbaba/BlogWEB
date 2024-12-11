@@ -1,10 +1,6 @@
 export async function getFiltersForGetPosts(currentPage) {
 
     const formData = new FormData(document.querySelector('#form-filters'));
-    if (!formData) {
-        console.error('Form with ID #form-filters not found!');
-        return;
-    }
 
     const tags = formData.getAll('search-tag');
     const author = formData.get('input-search-by-name') || null;
@@ -53,7 +49,7 @@ export async function getPosts(page = 1) {
     const currentToken = localStorage.getItem('token') || null;
     let searchParams = await getFiltersForGetPosts(page);
 
-    updateUrlParams(searchParams)
+    updateUrlParams(searchParams);
 
     searchParams = new URLSearchParams(window.location.search);
 
@@ -75,7 +71,6 @@ export async function getPosts(page = 1) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             return data;
         }
         if (!response.ok) {

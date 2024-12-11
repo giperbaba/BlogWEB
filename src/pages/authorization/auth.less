@@ -1,4 +1,4 @@
-@import '../../general-less/main.less';
+@import '../../general-less/general.less';
 
 @text-dark-color: #2f2f2f;
 @button-dark-color: #6c757d;
@@ -13,7 +13,7 @@
     height: auto;
     width: 550px;
     gap: 12px;
-    padding: 20px;
+    padding: 20px; 
     box-shadow: 0px 0px 6px 6px @shadow;
     border-radius: 4px;
     border: 1px solid @border;
@@ -23,7 +23,7 @@
         font-size: 28px;
     }
 
-    .form-item {
+    .form-item { 
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -33,11 +33,13 @@
     .form-input {
         text-indent: 5px;
         height: 40px;
+        border: 1px solid darken(@border, 5%);
+        border-radius: 4px;
     }
 
     .button {
         height: 40px;
-        color: white;
+        color: white; 
         border: none;
         border-radius: 4px;
         font-size: 15px;

@@ -1,35 +1,11 @@
 import { login } from '../authorization/auth.js'
 import { register } from '../registration/register.js'
-
-import { edit } from '../profile/profile.js'
-import { logout } from '../profile/profile.js'
-import { getResponseProfile } from '../profile/profile.js'
-import { showProfile } from '../profile/profile.js'
-
-import { pushTags } from '../main/main.js'
-import { generatePostOptions } from '../main/main.js'
-
-import { getPosts } from '../main/post/post.js'
-import { showPosts } from '../main/main.js'
-import { updatePagination } from '../main/main.js'
-
-import { addLike } from '../main/post/post.js'
-import { deleteLike } from '../main/post/post.js'
-import { deleteComment, editComment, uploadConcretePostPage } from '../concrete-post/concrete-post.js'
-
-import { sendComment } from '../concrete-post/concrete-post.js'
-import { openReplies } from '../concrete-post/concrete-post.js'
-
-import { showInputAnswer } from '../concrete-post/concrete-post.js'
-import { showInputEditComment } from '../concrete-post/concrete-post.js'
-
-import { pushGroups } from '../write-post/write-post.js'
-
-import { createPost } from '../write-post/write-post.js'
-
-import { createSearchAddressFields } from '../write-post/write-post.js'
+import { edit, logout, getResponseProfile, showProfile } from '../profile/profile.js'
+import { pushTags, generatePostOptions, showPosts, updatePagination } from '../main/main.js'
+import { getPosts, addLike, deleteLike } from '../main/post/post.js'
+import { deleteComment, editComment, uploadConcretePostPage, sendComment, openReplies, showInputAnswer, showInputEditComment } from '../concrete-post/concrete-post.js'
+import { pushGroups, createPost, createSearchAddressFields } from '../write-post/write-post.js'
 import { showCommunities } from '../communities/communities.js'
-
 import { showAuthors } from '../authors/authors.js'
 
 export function navigate(page, postId = null, anchor = null, options = {}) {
@@ -210,7 +186,6 @@ document.getElementById('main').addEventListener('click', async function (event)
             currentPageData = await getPosts(prevPage);
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
-            window.scrollTo(0, 0);
             break;
 
         case 'button-next-page-posts':
@@ -218,7 +193,6 @@ document.getElementById('main').addEventListener('click', async function (event)
             currentPageData = await getPosts(nextPage);
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
-            window.scrollTo(0, 0);
             break;
 
         case 'first-button-page':
@@ -228,7 +202,6 @@ document.getElementById('main').addEventListener('click', async function (event)
             currentPageData = await getPosts(pageChange);
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
-            window.scrollTo(0, 0);
             break;
 
         case 'button-read-full':

@@ -27,7 +27,7 @@ export async function pushTags() {
 
 export function generatePostOptions() {
     const postsCountSelect = document.getElementById('posts-count');
-    for (let i = 1; i <= 200; i++) {
+    for (let i = 5; i <= 200; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = i;
@@ -92,6 +92,10 @@ export async function showPosts(currentPageData) {
     posts.forEach(async post => {
         container.appendChild(await getConcretePostHtml(post));
     });
+    window.scrollTo({
+        top: 100,
+        behavior: "smooth",
+      });
 }
 
 export async function getConcretePostHtml(post, concretePage = false) {
