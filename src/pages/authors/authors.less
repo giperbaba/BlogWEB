@@ -35,7 +35,7 @@
                 position: relative;
                 margin: 0px;
             }
-    
+
             #icon-man {
                 width: 45px;
                 height: 45px;
@@ -71,6 +71,10 @@
                 .text-name {
                     font-size: 19px;
                     font-weight: 500;
+                    //max-width: 100%;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+                    white-space: normal;
                 }
 
                 .text-cursive {
@@ -134,12 +138,19 @@
             .count {
                 width: 78px !important;
                 height: 35px !important;
-            } 
+            }
         }
 
         .text-name {
             font-size: 17px !important;
+            overflow-wrap: break-word !important;
             font-weight: 500;
+            text-overflow: ellipsis;
+            max-width: 129px;
+        } 
+
+        .text-count {
+            overflow-wrap: break-word !important;
         }
     }
 }

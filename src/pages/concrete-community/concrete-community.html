@@ -1,0 +1,68 @@
+<div id="page-post">
+    
+    <div class="grid-header">
+        <div class="container-group-info">
+            <div class="container-group-name-buttons">
+                <h1 id="text-group-name"></h1>
+                <div class="container-buttons">
+                    <button class="button" id="button-write-post" data-page="writePost">Написать пост</button>
+                    <button class="button" id="subscription">Подписаться</button>
+                </div>
+            </div>
+            <p id="text-amount-subscribers"></p>
+            <p id="text-type-community"></p>
+            <h3 id="text-admins">Администраторы</h3>
+            <div id="container-admins"></div>
+            
+        </div>
+       
+        <div class="container-filters">
+            <div class="text-heading">Фильтры</div>
+    
+            <form id="form-filters">   
+                <div class="filter-item" id="sort-by">
+                    <label for="sort-by">Сортировать</label>
+                    <select class="form-input" name="sort-by" id="select-sort-by">
+                        <option value="CreateDesc">По дате создания (сначала новые)</option>
+                        <option value="CreateAsc">По дате создания (сначала старые)</option>
+                        <option value="LikeDesc">По количеству лайков (по убыванию)</option>
+                        <option value="LikeAsc">По количеству лайков (по возрастанию)</option>
+                    </select>
+                </div>
+
+                <div class="filter-item" id="search-tag">
+                    <label for="search-tag">Поиск по тэгам</label>
+                    <select multiple name="search-tag" id="select-search-tag">
+    
+                    </select>
+
+                    <button class="button" id="button-apply-filters" type="button">Применить</button>
+                </div>
+                
+            </form>
+        </div>
+        <p id="error"></p>
+    </div>
+    
+    <div class="container-posts"></div>
+    
+    <div class="container-pagination">
+        <div class="pagination-buttons">
+            <button class="button-paginaton" id="button-prev-page-posts">&lt;</button>
+            <button class="button-paginaton" id="first-button-page">1</button>
+            <button class="button-paginaton" id="second-button-page">2</button>
+            <button class="button-paginaton" id="third-button-page">3</button>
+            <button class="button-paginaton" id="button-next-page-posts">&gt;</button>
+        </div>
+        <div class="posts-count-filter">
+            <label for="posts-count">Число постов на странице</label>
+            <select class="form-input" name="posts-count" id="posts-count">
+            </select>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/src/pages/concrete-community/concrete-community.css">
+<script type="module" src="/src/pages/concrete-community/concrete-community.js"></script>
+<script type="module" src="/src/utils/tag.js"></script>
+<script type="module" src="/src/pages/main/post/post.js"></script>

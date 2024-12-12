@@ -3,6 +3,10 @@ import { requestSearchAddress } from "../address/address.js";
 
 import { handleError } from "../../utils/utils.js";
 
+import { createCommunityPost } from "../communities/community/community.js";
+import { getResponseProfile } from "../profile/profile.js";
+import { getRoleInCommunity } from "../communities/community/community.js";
+
 let lastGuidAddress = null;
 let addressHistory = [];
 
@@ -54,14 +58,24 @@ export async function createPost() {
 
     const addressId = lastGuidAddress;
 
-    const success = await sendRequestCreateUserPost({
+    let success = false;
+
+    let communityId = formData.get('post-group') || null;
+    const data = {
         title,
         description,
         readingTime,
         image,
         addressId,
         tags
-    });
+    };
+
+    if (communityId != null && communityId != "null") {
+        success = await createCommunityPost(communityId, data);
+    }
+    else {
+        success = await sendRequestCreateUserPost(data);
+    }
 
     if (success) {
         const form = document.querySelector('.form-write-new-post');

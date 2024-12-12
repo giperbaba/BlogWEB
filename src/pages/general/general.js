@@ -7,8 +7,10 @@ import { deleteComment, editComment, uploadConcretePostPage, sendComment, openRe
 import { pushGroups, createPost, createSearchAddressFields } from '../write-post/write-post.js'
 import { showCommunities } from '../communities/communities.js'
 import { showAuthors } from '../authors/authors.js'
+import { showConcreteCommunityPage } from '../concrete-community/concrete-community.js'
+import { getRoleInCommunity, requestGetCommunityPosts } from '../communities/community/community.js'
 
-export function navigate(page, postId = null, anchor = null, options = {}) {
+export function navigate(page, postId = null, communityId = null, options = {}) {
     const pages = {
         login: '/src/pages/authorization/authorization.html',
         registration: '/src/pages/registration/registration.html',
@@ -17,9 +19,9 @@ export function navigate(page, postId = null, anchor = null, options = {}) {
         writePost: '/src/pages/write-post/write-post.html',
         concrete: '/src/pages/concrete-post/concrete-post.html',
         communities: '/src/pages/communities/communities.html',
-        authors: 'src/pages/authors/authors.html'
+        authors: '/src/pages/authors/authors.html',
+        community: '/src/pages/concrete-community/concrete-community.html'
     };
-
     const url = pages[page];
 
     if (!url) {
@@ -35,7 +37,7 @@ export function navigate(page, postId = null, anchor = null, options = {}) {
         return navigate('login');
     }
 
-    const newPath = buildPathForPage(page, postId, anchor, options);
+    const newPath = buildPathForPage(page, postId, communityId, options);
     history.pushState({ page }, '', newPath);
 
     fetch(url)
@@ -75,21 +77,26 @@ export function navigate(page, postId = null, anchor = null, options = {}) {
             else if (page === 'concrete') {
                 if (postId) {
                     await uploadConcretePostPage(postId);
-                    //if (anchor) scrollToAnchor(anchor);
                 }
             }
             else if (page === 'communities') {
                 await showCommunities();
             }
 
-            else if (page = 'authors') {
+            else if (page === 'authors') {
                 await showAuthors();
+            }
+
+            else if (page === 'community') {
+                showConcreteCommunityPage(communityId);
+                generatePostOptions();
+                pushTags();
             }
         })
         .catch(console.error);
 }
 
-function buildPathForPage(page, postId = null, anchor = null, options = {}) {
+function buildPathForPage(page, postId = null, communityId = null, options = {}) {
     switch (page) {
         case 'login':
         case 'registration':
@@ -98,9 +105,11 @@ function buildPathForPage(page, postId = null, anchor = null, options = {}) {
         case 'authors':
             return `/${page}`;
         case 'writePost':
-            return 'create/post'
+            return 'create/post';
         case 'concrete':
             return `/post/${postId}}`;
+        case 'community':
+            return `/communities/${communityId}`;
         case 'main':
         default: {
             const params = new URLSearchParams(options).toString();
@@ -176,21 +185,37 @@ document.getElementById('main').addEventListener('click', async function (event)
             break;
 
         case 'button-apply-filters':
-            currentPageData = await getPosts(1);
+            if (target.getAttribute('id-community')) {
+                currentPageData = await requestGetCommunityPosts(target.getAttribute('id-community'), 1);
+            }
+            else {
+                currentPageData = await getPosts(1);
+            }
             updatePagination(currentPageData);
             await showPosts(currentPageData);
             break;
 
         case 'button-prev-page-posts':
             const prevPage = (currentPageData.pagination.current - 1) > 0 ? currentPageData.pagination.current - 1 : currentPageData.pagination.count;
-            currentPageData = await getPosts(prevPage);
+
+            if (target.getAttribute('id-community')) {
+                currentPageData = await requestGetCommunityPosts(target.getAttribute('id-community'), prevPage);
+            }
+            else {
+                currentPageData = await getPosts(prevPage);
+            }
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
             break;
 
         case 'button-next-page-posts':
             const nextPage = (currentPageData.pagination.current + 1) <= currentPageData.pagination.count ? currentPageData.pagination.current + 1 : 1;
-            currentPageData = await getPosts(nextPage);
+            if (target.getAttribute('id-community')) {
+                currentPageData = await requestGetCommunityPosts(target.getAttribute('id-community'), nextPage);
+            }
+            else {
+                currentPageData = await getPosts(nextPage);
+            }
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
             break;
@@ -199,7 +224,12 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'second-button-page':
         case 'third-button-page':
             const pageChange = parseInt(target.textContent, 10);
-            currentPageData = await getPosts(pageChange);
+            if (target.getAttribute('id-community')) {
+                currentPageData = await requestGetCommunityPosts(target.getAttribute('id-community'), pageChange);
+            }
+            else {
+                currentPageData = await getPosts(pageChange);
+            }
             await updatePagination(currentPageData);
             await showPosts(currentPageData);
             break;
@@ -287,8 +317,21 @@ document.getElementById('main').addEventListener('click', async function (event)
         case 'button-write-post':
             const token = localStorage.getItem('token');
             if (token) {
-                if (await getResponseProfile(token) !== null) {
-                    navigate(page);
+                const profile = await getResponseProfile(token);
+                if (profile !== null) {
+                    if (target.getAttribute('id-community')) {
+                        const role = await getRoleInCommunity(target.getAttribute('id-community'));
+
+                        if (role == 'Administrator') {
+                            navigate(page);
+                        }
+                        else {
+                            alert('You must be administrator of this group to write post in concrete community');
+                        }
+                    }
+                    else {
+                        navigate(page);
+                    }                   
                     break;
                 }
             }
@@ -305,7 +348,7 @@ document.getElementById('main').addEventListener('click', async function (event)
             const formCreatePost = document.querySelector('.form-write-new-post');
             if (formCreatePost && formCreatePost.checkValidity()) {
                 event.preventDefault();
-                createPost();         
+                await createPost();         
             }
             else {
                 formCreatePost?.reportValidity();

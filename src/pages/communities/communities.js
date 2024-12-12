@@ -2,6 +2,7 @@ import { getCommunityList } from "./community/community.js";
 import { getRoleInCommunity } from "./community/community.js";
 import { requestSubscribe } from "./community/community.js";
 import { requestUnsubscribe } from "./community/community.js";
+import { navigate } from "../general/general.js";
 
 export async function showCommunities() {
     const allCommunities = await getCommunityList();
@@ -25,18 +26,24 @@ function getConcreteCommunityHtml(community, role) {
     communityContainer.classList.add('item-community');
 
     const nameCommunity = document.createElement('h3');
+    nameCommunity.id = 'name-community';
     nameCommunity.textContent = community.name;
+    nameCommunity.addEventListener('click', function(e) {
+        navigate('community', null, community.id)
+    });
 
     communityContainer.appendChild(nameCommunity);
-
+    
+    let button = null;
     switch (role) {
         case 'Subscriber' :
         case null:
-            const button = document.createElement('button');
+        case 'Administrator': 
+            button = document.createElement('button');
             button.classList.add('button');
             button.id = community.id;
 
-            if (role == 'Subscriber') {
+            if (role == 'Subscriber' || role == 'Administrator') {
                 button.innerHTML = 'Отписаться';
                 button.style.background = '#dc3545';
             }
@@ -60,8 +67,18 @@ function getConcreteCommunityHtml(community, role) {
             });
             break;
 
-        case 'Administrator': 
         case 'Unauthorized':
+            button = document.createElement('button');
+            button.classList.add('button');
+            button.id = community.id;
+
+            button.innerHTML = 'Подписаться';
+            
+            communityContainer.appendChild(button);
+
+            button.addEventListener('click', async function(e) {
+                alert('Please, authorize to subcribe');
+            });
             break;
     }
 

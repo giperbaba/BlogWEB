@@ -11,13 +11,61 @@
     flex-direction: column;
     margin-top: 30px;
     height: 100%;
-    max-width: 75%;
+    width: 75%;
 
     .grid-header {
         max-width: 100%;
         display: flex;
         flex-direction: column;
         margin-bottom: 5px;
+
+        .container-group-info {
+            border-radius: 4px;
+            border: 1px solid @border;
+            margin-top: 14px;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+
+            .container-group-name-buttons {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .container-buttons {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10px;
+                }
+            }
+
+            .author {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 6px;
+                border-bottom: 1px solid @border;
+                margin: 4px;
+                padding: 10px;
+
+                .icon-gender {
+                    width: 45px;
+                    height: 45px;
+                    margin: 4px;
+                    border: 1px solid @border;
+                    border-radius: 50%;
+                    position: relative;
+                }
+
+                .text-name {
+                    font-size: 19px;
+                    font-weight: 500;
+                }
+            }
+        }
 
         .container-filters {
             border-radius: 4px;
@@ -31,22 +79,23 @@
             }
 
             #form-filters {
-                display: grid;
-                grid-template-columns: repeat(6, 1fr);
-                grid-template-rows: repeat(2, 1fr);
+                display: flex;
+                flex-direction: row;
+                gap: 15px;
 
-                align-items: center;
                 justify-content: center;
 
                 column-gap: 10px;
                 padding: 15px;
                 padding-bottom: 0px;
+                width: 100%;
 
                 .filter-item {
                     display: flex;
                     flex-direction: column;
                     gap: 2px;
                     height: 50px;
+                    width: 50%;
 
                     .form-input {
                         height: 30px;
@@ -56,16 +105,11 @@
                     }
                 }
 
-                #input-search-by-name {
-                    align-self: start;
-                    grid-column-start: 1;
-                    grid-column-end: span 3;
-                }
-
                 #search-tag {
-                    grid-column-start: 4;
-                    grid-column-end: span 3;
-                    height: 80px;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
 
                     #select-search-tag {
                         text-indent: 5px;
@@ -74,39 +118,9 @@
                     }
                 }
 
-                #sort-by {
-                    grid-column-start: 1;
-                    grid-column-end: span 2;
-                }
-
-                #read-time-min {
-                    grid-column-start: 3;
-                    grid-column-end: span 1;
-                }
-
-                #read-time-max {
-                    grid-column-start: 4;
-                    grid-column-end: span 1;
-                }
-
                 #button-apply-filters {
-                    grid-column-start: 6;
-                    grid-column-end: span 1;
-                }
-
-                #filter-item-checkbox {
-                    grid-column-start: 5;
-                    grid-column-end: span 1;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
                     margin-top: 6px;
-                    gap: 6px;
-                }
-                
-                #are-only-ny-communities {
-                    border: 1px solid darken(@border, 5%);
-                    border-radius: 4px;
+                    margin-bottom: 10px;
                 }
             }
         }
@@ -127,12 +141,6 @@
         color: red;
         margin-top: 10px;
         margin-left: 10px;
-    }
-
-    #button-write-post {
-        align-self: flex-end;
-        margin-right: 10px;
-
     }
 
     .container-posts {
@@ -318,7 +326,7 @@
             display: flex;
             flex-direction: row;
             gap: 0px;
-            align-self:flex-end;
+            align-self: flex-end;
         }
 
         .posts-count-filter {
@@ -326,8 +334,8 @@
             flex-direction: column;
             gap: 4px;
             margin-left: auto;
-            align-self:flex-end;
-            
+            align-self: flex-end;
+
         }
 
         #posts-count {
@@ -338,26 +346,17 @@
     }
 }
 
-@media screen and (max-width: 836px) {
+@media screen and (max-width: 670px) {
     #page-post {
-        max-width: 95%;
-        width: 100%;
+        max-width: 100%;
+        width: 95%;
 
         .grid-header {
             height: 100%;
-
-            #form-filters {
-                gap: 8px;
-                display: flex !important;
-
-                align-items: start !important;
-                flex-direction: column !important;
-
-                #button-apply-filters {
-                    margin-bottom: 10px;
-                    align-self: end;
-                }
-            }
+        }
+        
+        .container-buttons {
+            flex-direction: column !important;
         }
     }
 }
