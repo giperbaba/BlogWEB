@@ -10,18 +10,18 @@ import { getResponseProfile } from '../profile/profile.js';
 
 import { requestDeleteComment } from './comment/comment.js';
 
-import { navigate } from '../general/general.js';
-
 let post = null;
 let postHtml = null;
 let comments = null;
 
 export async function uploadConcretePostPage(postId) {
     const postContainer = document.getElementById('container-post');
+    console.log(postContainer);
     const commentsContainer = document.getElementById('container-comments');
 
     post = await getInformationConcretePost(postId);
     postHtml = await getConcretePostHtml(post, true);
+    console.log(postHtml);
 
     postContainer.appendChild(postHtml);
 
@@ -29,7 +29,6 @@ export async function uploadConcretePostPage(postId) {
     comments.forEach(async comment => {
         commentsContainer.appendChild(await getCommentHtml(comment));
     });
-
 
     const buttonSendComment = document.getElementById('button-send-comment');
     buttonSendComment.setAttribute('data-post-id', post.id);

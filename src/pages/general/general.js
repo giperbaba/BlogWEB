@@ -10,7 +10,7 @@ import { showAuthors } from '../authors/authors.js'
 import { showConcreteCommunityPage } from '../concrete-community/concrete-community.js'
 import { getRoleInCommunity, requestGetCommunityPosts } from '../communities/community/community.js'
 
-export function navigate(page, postId = null, communityId = null, options = {}) {
+export function navigate(page, postId = null, communityId = null, options = {}, group = null) {
     const pages = {
         login: '/src/pages/authorization/authorization.html',
         registration: '/src/pages/registration/registration.html',
@@ -60,20 +60,31 @@ export function navigate(page, postId = null, communityId = null, options = {}) 
                         editHeaderButtons(page, profile);
                     })
                     .catch(console.error);
-            } 
+            }
             else if (page === 'login' || page === 'registration') {
                 editHeaderButtons(page);
-            } 
+            }
             else if (page === 'main') {
                 editHeaderButtons(page);
                 generatePostOptions();
                 pushTags();
-            } 
+            }
             else if (page === 'writePost') {
-                pushGroups();
+                await pushGroups();
                 pushTags();
                 createSearchAddressFields();
-            } 
+                console.log(group);
+                if (group) {
+                    const selectGroup = document.querySelector('#post-group');
+                    console.log(selectGroup);
+                    const optionToSelect = Array.from(selectGroup.options).find(option => option.value === group);
+
+                    if (optionToSelect) {
+                        selectGroup.value = group; 
+                    }
+        
+                }
+            }
             else if (page === 'concrete') {
                 if (postId) {
                     await uploadConcretePostPage(postId);
@@ -255,19 +266,19 @@ document.getElementById('main').addEventListener('click', async function (event)
             postId = target.getAttribute('data-post-id');
 
             const isLiked = target.getAttribute('src') === '/src/drawable/icon-heart-empty.png';
-                const action = isLiked ? addLike : deleteLike;
+            const action = isLiked ? addLike : deleteLike;
 
-                if (await action(postId)) {
-                    target.src = isLiked
-                        ? '/src/drawable/icon-heart-full.png'
-                        : '/src/drawable/icon-heart-empty.png';
+            if (await action(postId)) {
+                target.src = isLiked
+                    ? '/src/drawable/icon-heart-full.png'
+                    : '/src/drawable/icon-heart-empty.png';
 
-                    const amountLikesElement = target.parentNode.querySelector('.amount-likes');
-                    const currentLikes = parseInt(amountLikesElement.textContent) || 0;
-                    amountLikesElement.textContent = isLiked
-                        ? currentLikes + 1
-                        : Math.max(currentLikes - 1, 0);
-                }
+                const amountLikesElement = target.parentNode.querySelector('.amount-likes');
+                const currentLikes = parseInt(amountLikesElement.textContent) || 0;
+                amountLikesElement.textContent = isLiked
+                    ? currentLikes + 1
+                    : Math.max(currentLikes - 1, 0);
+            }
 
             break;
 
@@ -323,7 +334,7 @@ document.getElementById('main').addEventListener('click', async function (event)
                         const role = await getRoleInCommunity(target.getAttribute('id-community'));
 
                         if (role == 'Administrator') {
-                            navigate(page);
+                            navigate(page, null, null, {}, target.getAttribute('id-community'));
                         }
                         else {
                             alert('You must be administrator of this group to write post in concrete community');
@@ -331,7 +342,7 @@ document.getElementById('main').addEventListener('click', async function (event)
                     }
                     else {
                         navigate(page);
-                    }                   
+                    }
                     break;
                 }
             }
@@ -348,7 +359,7 @@ document.getElementById('main').addEventListener('click', async function (event)
             const formCreatePost = document.querySelector('.form-write-new-post');
             if (formCreatePost && formCreatePost.checkValidity()) {
                 event.preventDefault();
-                await createPost();         
+                await createPost();
             }
             else {
                 formCreatePost?.reportValidity();

@@ -4,8 +4,8 @@ import { requestSearchAddress } from "../address/address.js";
 import { handleError } from "../../utils/utils.js";
 
 import { createCommunityPost } from "../communities/community/community.js";
-import { getResponseProfile } from "../profile/profile.js";
-import { getRoleInCommunity } from "../communities/community/community.js";
+import { uploadConcretePostPage } from "../concrete-post/concrete-post.js";
+import { navigate } from "../general/general.js";
 
 let lastGuidAddress = null;
 let addressHistory = [];
@@ -78,8 +78,23 @@ export async function createPost() {
     }
 
     if (success) {
-        const form = document.querySelector('.form-write-new-post');
-        form.reset();
+        await navigate('concrete');
+        const waitForPageLoad = () => {
+            return new Promise((resolve) => {
+                const observer = new MutationObserver((mutations, observer) => {
+                    const targetElement = document.querySelector('#container-post'); 
+                    if (targetElement) {
+                        observer.disconnect();
+                        resolve(targetElement);
+                    }
+                });
+
+                observer.observe(document.body, { childList: true, subtree: true });
+            });
+        };
+
+        await waitForPageLoad();
+        await uploadConcretePostPage(success);
     }
 }
 
