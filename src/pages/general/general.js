@@ -76,7 +76,6 @@ export function navigate(page, postId = null, communityId = null, options = {}, 
                 console.log(group);
                 if (group) {
                     const selectGroup = document.querySelector('#post-group');
-                    console.log(selectGroup);
                     const optionToSelect = Array.from(selectGroup.options).find(option => option.value === group);
 
                     if (optionToSelect) {
